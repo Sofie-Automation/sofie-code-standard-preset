@@ -1,16 +1,16 @@
 # Sofie Code Standard Preset
 
-[![Node CI](https://github.com/nrkno/sofie-code-standard-preset/actions/workflows/node.yaml/badge.svg)](https://github.com/nrkno/sofie-code-standard-preset/actions/workflows/node.yaml)
+[![Node CI](https://github.com/Sofie-Automation/sofie-code-standard-preset/actions/workflows/node.yaml/badge.svg)](https://github.com/Sofie-Automation/sofie-code-standard-preset/actions/workflows/node.yaml)
 [![npm](https://img.shields.io/npm/v/@sofie-automation/code-standard-preset)](https://www.npmjs.com/package/@sofie-automation/code-standard-preset)
 
-This is the _Sofie_ code standard preset library used in the [_**Sofie** TV Automation System_](https://github.com/nrkno/Sofie-TV-automation/) for defining a code standard preset through [_ESLint_](https://github.com/nrkno/sofie-eslint-plugin/) and [_Prettier_](https://prettier.io/).
+This is the _Sofie_ code standard preset library used in the [_**Sofie** TV Automation System_](https://github.com/Sofie-Automation/Sofie-TV-automation/) for defining a code standard preset through [_ESLint_](https://github.com/Sofie-Automation/sofie-eslint-plugin/) and [_Prettier_](https://prettier.io/).
 
 A script for checking compatible licenses is included.
 
 ## General Sofie System Information
 
-- [_Sofie_ Documentation](https://nrkno.github.io/sofie-core/)
-- [_Sofie_ Releases](https://nrkno.github.io/sofie-core/releases)
+- [_Sofie_ Documentation](https://sofie-automation.github.io/sofie-core//)
+- [_Sofie_ Releases](https://sofie-automation.github.io/sofie-core//releases)
 - [Contribution Guidelines](CONTRIBUTING.md)
 - [License](LICENSE)
 

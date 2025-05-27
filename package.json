@@ -4,12 +4,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/nrkno/sofie-code-standard-preset.git"
+		"url": "git+https://github.com/Sofie-Automation/sofie-code-standard-preset.git"
 	},
 	"bugs": {
-		"url": "https://github.com/nrkno/sofie-code-standard-preset/issues"
+		"url": "https://github.com/Sofie-Automation/sofie-code-standard-preset/issues"
 	},
-	"homepage": "https://github.com/nrkno/sofie-code-standard-preset#readme",
+	"homepage": "https://github.com/Sofie-Automation/sofie-code-standard-preset#readme",
 	"contributors": [
 		{
 			"name": "Julian Waller",
