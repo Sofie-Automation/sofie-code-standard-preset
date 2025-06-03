@@ -110,7 +110,9 @@ const nextVersion = semver.inc(
 	(cli.flags.prerelease !== undefined ? 'pre' : '') + (hasBreaking ? 'major' : hasFeatures ? 'minor' : 'patch'),
 	identifier
 )
-let md = `## [${nextVersion}](${repoUrl}/compare/${lastTag}...v${nextVersion}) (${new Date().toDateString()})\n`
+
+const compareUrl = lastTag ? `${repoUrl}/compare/${lastTag}...v${nextVersion}` : `${repoUrl}/commits/v${nextVersion}`
+let md = `## [${nextVersion}](${compareUrl}) (${new Date().toDateString()})\n`
 
 if (Object.keys(breakingChanges).length) {
 	md += '\n## Breaking changes\n'
