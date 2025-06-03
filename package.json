@@ -49,6 +49,7 @@
 	],
 	"dependencies": {
 		"@sofie-automation/eslint-plugin": "0.2.0",
+		"@vitest/eslint-plugin": "^1.2.1",
 		"date-fns": "^4.1.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-jest": "^28.11.0",
