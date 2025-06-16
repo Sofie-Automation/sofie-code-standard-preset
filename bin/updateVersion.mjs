@@ -38,6 +38,7 @@ const HEADER = `# Changelog\n\nAll notable changes to this project will be docum
 const execPromise = (command) => new Promise((r) => exec(command, (e, out) => (e && r(e)) || r(out)))
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
+const isMonoRepo = !!packageFile.workspaces
 
 if (!packageFile.homepage) {
 	console.error('No repository homepage specified in the package.json, exiting...')
@@ -109,7 +110,9 @@ const nextVersion = semver.inc(
 	(cli.flags.prerelease !== undefined ? 'pre' : '') + (hasBreaking ? 'major' : hasFeatures ? 'minor' : 'patch'),
 	identifier
 )
-let md = `## [${nextVersion}](${repoUrl}/compare/${lastTag}...v${nextVersion}) (${new Date().toDateString()})\n`
+
+const compareUrl = lastTag ? `${repoUrl}/compare/${lastTag}...v${nextVersion}` : `${repoUrl}/commits/v${nextVersion}`
+let md = `## [${nextVersion}](${compareUrl}) (${new Date().toDateString()})\n`
 
 if (Object.keys(breakingChanges).length) {
 	md += '\n## Breaking changes\n'
@@ -159,14 +162,23 @@ if (!cli.flags.dryRun) {
 
 	// update the package.json
 	if (existsSync('.yarn')) {
-		// yarn 3 needs a different command
-		await execPromise('yarn version ' + nextVersion)
+		if (isMonoRepo) {
+			// Update all workspaces
+			await execPromise('yarn workspaces foreach --all version -d ' + nextVersion)
+			await execPromise('yarn version apply --all')
+		} else {
+			// yarn 3 needs a different command
+			await execPromise('yarn version ' + nextVersion)
+		}
 	} else {
 		await execPromise('yarn version --no-git-tag-version --new-version ' + nextVersion)
 	}
 
 	// git commit
 	await execPromise(`git add package.json yarn.lock CHANGELOG.md`)
+	if (isMonoRepo) {
+		await execPromise(`git add */package.json`)
+	}
 
 	await execPromise(`git commit -m "chore(release): v${nextVersion}"`)
 
