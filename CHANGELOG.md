@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [3.1.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.0.0...v3.1.0) (Tue Jun 17 2025)
+
+
+### Features
+
+* add support for using vitest (#29) [07c9d20](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/07c9d2082abc6e5518bac86e997049f25db98b5e)
+* initial support for monorepo with single changelog (#30) [87dc3d5](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/87dc3d5dff42de5c8dc9369f001cca6787c7df4d)
+* initial support for monorepo with single changelog [3a20974](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/3a20974c50b3409485755b06f4b8c45e62c82452)
+
+### Fixes
+
+* generate correct compare url for initial tag [444f86a](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/444f86ab6278ae65346a9fbb72b2110a435795cd)
+
 ## [3.0.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v2.5.2...v3.0.0) (Tue Feb 04 2025)
 
 
