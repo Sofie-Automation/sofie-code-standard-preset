@@ -2,7 +2,6 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import eslint from '@eslint/js'
 import neslint from 'eslint-plugin-n'
 import tseslint from 'typescript-eslint'
-import jestPlugin from 'eslint-plugin-jest'
 import sofiePlugin from '@sofie-automation/eslint-plugin'
 
 /**
@@ -23,10 +22,17 @@ function compactObj(obj) {
 }
 
 /**
- * @param {{ ignores?: string[], tsconfigName?: string | string[], disableNodeRules?: boolean }} options
+ * @param {{ ignores?: string[], tsconfigName?: string | string[], disableNodeRules?: boolean, testRunner?: 'jest' | 'vitest' = 'jest' }} options
  * @returns {Promise<import('eslint').Linter.FlatConfig[]>}
  */
 export async function generateEslintConfig(options) {
+	// Conditionally load the testRunner plugin
+	const jestPlugin =
+		options.testRunner === undefined && options.testRunner === 'jest'
+			? (await import('eslint-plugin-jest')).default
+			: null
+	const vitestPlugin = options.testRunner === 'vitest' ? (await import('@vitest/eslint-plugin')).default : null
+
 	return [
 		{
 			// Setup the parser for js/ts
@@ -77,6 +83,7 @@ export async function generateEslintConfig(options) {
 			// @ts-expect-error tseslint type mismatch
 			plugins: compactObj({
 				jest: jestPlugin,
+				vitest: vitestPlugin,
 				'@typescript-eslint': tseslint.plugin,
 				'@sofie-automation': sofiePlugin,
 			}),
@@ -148,6 +155,16 @@ export async function generateEslintConfig(options) {
 					rules: {
 						...jestPlugin.configs['flat/recommended'].rules,
 						'jest/no-mocks-import': 'off',
+					},
+				}
+			: null,
+		vitestPlugin
+			? {
+					// enable vitest rules on test files
+					files: ['**/__tests__/**/*', 'test/**/*'],
+					...vitestPlugin.configs.recommended,
+					rules: {
+						...vitestPlugin.configs.recommended.rules,
 					},
 				}
 			: null,
