@@ -28,7 +28,7 @@ function compactObj(obj) {
 export async function generateEslintConfig(options) {
 	// Conditionally load the testRunner plugin
 	const jestPlugin =
-		options.testRunner === undefined && options.testRunner === 'jest'
+		options.testRunner === undefined || options.testRunner === 'jest'
 			? (await import('eslint-plugin-jest')).default
 			: null
 	const vitestPlugin = options.testRunner === 'vitest' ? (await import('@vitest/eslint-plugin')).default : null

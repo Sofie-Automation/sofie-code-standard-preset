@@ -178,7 +178,7 @@ If not already, the project should be updated to yarn v4 instead of yarn v1. yar
 1. Make sure that you are ready to do a semver major bump, with a new minimum nodejs version of v20.
 1. Update your package.json engines to require node 20
 1. Install the updated `@sofie-automation/code-standard-preset` package
-1. Install tools that used to be included by the preset package: `yarn add eslint husky lint-staged prettier`, any you do not need can be omitted.
+1. Install tools that used to be included by the preset package: `yarn add --dev eslint husky lint-staged prettier`, any you do not need can be omitted.
 1. Check the package.json scripts;
    - Change `husky install` to `husky`
    - Change the `lint:raw` to simply `eslint`
