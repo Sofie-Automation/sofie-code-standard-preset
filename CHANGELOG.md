@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [3.1.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.1.0...v3.1.1) (Tue Jul 29 2025)
+
+
+### Fixes
+
+* typo in eslint config [a54e9a2](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/a54e9a25d499b688093b567f6015c160b07b094d)
+
 ## [3.1.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.0.0...v3.1.0) (Tue Jun 17 2025)
 
 
