@@ -6,17 +6,19 @@ import path from 'path'
 import checker from 'license-checker'
 
 const cli = meow(
+	// editorconfig-checker-disable -- The below string should be formatted with spaces
 	`
     Usage
       $ sofie-licensecheck
-	  $ sofie-licensecheck --allowPackages "package-name@1.2.3;other-package@1.2.3"
+      $ sofie-licensecheck --allowPackages "package-name@1.2.3;other-package@1.2.3"
 
     Options
-	  --debug  Show full packages list
-	  --allowPackages Semi-colon separated list of packages to ignore (eg cycle@1.0.3;underscore@1.12.0)
-	  --allowList Which default list of licenses to use. Possible values: "MIT", "none". Defaults to "MIT"
-	  --allowLicenses Semi-colon separated list of licenses to allow in addition to the default list (eg GPL-3.0-only;MIT)
+      --debug  Show full packages list
+      --allowPackages Semi-colon separated list of packages to ignore (eg cycle@1.0.3;underscore@1.12.0)
+      --allowList Which default list of licenses to use. Possible values: "MIT", "none". Defaults to "MIT"
+      --allowLicenses Semi-colon separated list of licenses to allow in addition to the default list (eg GPL-3.0-only;MIT)
 `,
+	// editorconfig-checker-enable
 	{
 		importMeta: import.meta,
 		flags: {

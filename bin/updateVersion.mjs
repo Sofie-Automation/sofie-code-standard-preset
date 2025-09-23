@@ -7,15 +7,17 @@ import meow from 'meow'
 import { format } from 'date-fns'
 
 const cli = meow(
+	// editorconfig-checker-disable -- The below string should be formatted with spaces
 	`
     Usage
       $ sofie-version
 
     Options
-	  --dry-run  Simulate the version update process
-	  --prerelease Whether to tag a prerelease build, and the suffix to use
-	  --lastTag Optionally specify the last tag in the existing changelog
+      --dry-run  Simulate the version update process
+      --prerelease Whether to tag a prerelease build, and the suffix to use
+      --lastTag Optionally specify the last tag in the existing changelog
 `,
+	// editorconfig-checker-enable
 	{
 		importMeta: import.meta,
 		flags: {
