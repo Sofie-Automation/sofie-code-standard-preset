@@ -152,6 +152,8 @@ _Note: replace the {{PACKAGE-NAME}} with the correct package name, i.e. `hyperde
 * text=auto eol=lf
 ```
 
+Also copy the `.editorconfig` file from this repository if you want to use it.
+
 **Adjust** jest configuration files to use `tsconfig.json`. For example, update the start of `jest.config.js` ...
 
 ```javascript
