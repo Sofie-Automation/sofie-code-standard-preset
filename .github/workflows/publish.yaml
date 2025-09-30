@@ -4,6 +4,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: read
+  attestations: write # needed for provenance
+
 jobs:
   prerelease:
     name: Prerelease
@@ -51,7 +55,7 @@ jobs:
           yarn config set npmAuthToken $NPM_AUTH_TOKEN
 
           NEW_VERSION=$(node -p "require('./package.json').version")
-          yarn npm publish --access=public --tag "${{ steps.do-publish.outputs.publish }}"
+          yarn npm publish --access=public --provenance --tag "${{ steps.do-publish.outputs.publish }}"
 
           echo "**Published:** $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
         env:
