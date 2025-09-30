@@ -28,25 +28,25 @@ This readme assumes you are using yarn v4. For other package managers the steps 
 
 ```json
 {
-    ...,
-    "scripts": {
-        ...,
+	...,
+	"scripts": {
+		...,
 		"prepare": "husky",
 		"lint:raw": "eslint",
-        "lint": "run lint:raw .",
-        "lint-fix": "run lint --fix",
-        "license-validate": "sofie-licensecheck"
-    },
-    "prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
-    "lint-staged": {
-        "*.{css,json,md,scss}": [
-            "prettier --write"
-        ],
-        "*.{ts,tsx,js,jsx}": [
-            "run lint:raw --fix"
-        ]
-    },
-    ...
+		"lint": "run lint:raw .",
+		"lint-fix": "run lint --fix",
+		"license-validate": "sofie-licensecheck"
+	},
+	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
+	"lint-staged": {
+		"*.{css,json,md,scss}": [
+			"prettier --write"
+		],
+		"*.{ts,tsx,js,jsx}": [
+			"run lint:raw --fix"
+		]
+	},
+	...
 }
 ```
 
@@ -151,6 +151,8 @@ _Note: replace the {{PACKAGE-NAME}} with the correct package name, i.e. `hyperde
 ```
 * text=auto eol=lf
 ```
+
+Also copy the `.editorconfig` file from this repository if you want to use it.
 
 **Adjust** jest configuration files to use `tsconfig.json`. For example, update the start of `jest.config.js` ...
 
