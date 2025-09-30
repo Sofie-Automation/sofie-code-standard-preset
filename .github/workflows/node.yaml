@@ -22,7 +22,7 @@ jobs:
 
     permissions:
       contents: read
-      attestations: write # needed for provenance
+      id-token: write # needed for provenance
 
     steps:
       - uses: actions/checkout@v5
