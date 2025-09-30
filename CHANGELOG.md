@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [3.2.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.1.1...v3.2.0) (Tue Sep 30 2025)
+
+
+### Features
+
+* Add definitive `.editorconfig` to use across sofie projects (#33) [b79462c](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/b79462cc027b9ae77a1e8d0db4c55aacd9eb5032)
+
 ## [3.1.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.1.0...v3.1.1) (Tue Jul 29 2025)
 
 
