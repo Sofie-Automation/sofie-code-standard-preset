@@ -37,7 +37,8 @@ const cli = meow(
 const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?[0-9]+\.[0-9]+\.[0-9]+|<a name=)/m
 const HEADER = `# Changelog\n\nAll notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.\n\n`
 
-const execPromise = (command) => new Promise((r) => exec(command, (e, out) => (e && r(e)) || r(out)))
+const execPromise = (command) =>
+	new Promise((resolve, reject) => exec(command, (e, out) => (e && reject(e)) || resolve(out)))
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
 const isMonoRepo = !!packageFile.workspaces
@@ -182,7 +183,7 @@ if (!cli.flags.dryRun) {
 		await execPromise(`git add */package.json`)
 	}
 
-	await execPromise(`git commit -m "chore(release): v${nextVersion}"`)
+	await execPromise(`git commit --no-verify -m "chore(release): v${nextVersion}"`)
 
 	// create tag
 	await execPromise(`git tag v${nextVersion}`)
