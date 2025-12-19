@@ -1,7 +1,8 @@
 #! /usr/bin/env node
-import { exec } from 'child_process'
+import { execFile } from 'child_process'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
+import { promisify } from 'util'
 
 import { format } from 'date-fns'
 import meow from 'meow'
@@ -35,11 +36,10 @@ const cli = meow(
 	}
 )
 
-const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?[0-9]+\.[0-9]+\.[0-9]+|<a name=)/m
+const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?\d+\.\d+\.\d+|<a name=)/m
 const HEADER = `# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.\n\n`
 
-const execPromise = (command) =>
-	new Promise((resolve, reject) => exec(command, (e, out) => (e && reject(e)) || resolve(out)))
+const execPromise = async (file, args) => (await promisify(execFile)(file, args)).stdout
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
 const isMonoRepo = !!packageFile.workspaces
@@ -53,11 +53,11 @@ const currentVersion = packageFile.version
 const repoUrl = packageFile.homepage.split('#')[0]
 
 // find last valid tag
-const tags = cli.flags.lastTag || (await execPromise('git tag -l --sort=-v:refname')).split('\n')
+const tags = cli.flags.lastTag || (await execPromise('git', ['tag', '-l', '--sort=-v:refname'])).split('\n')
 const lastTag = cli.flags.lastTag || tags.find((tag) => semver.valid(tag)) || ''
 
 // find diff since last tag
-const rawDiff = await execPromise(`git log --format=+++%s__%b__%h__%H ${lastTag}..HEAD`)
+const rawDiff = await execPromise('git', ['log', '--format=+++%s__%b__%h__%H', `${lastTag}..HEAD`])
 const diff = rawDiff.split('+++').map((rawCommit) => {
 	const [subject, body, short, hash] = rawCommit.split('__')
 	return { subject, body, short, hash }
@@ -91,13 +91,13 @@ const changes = {}
 	}
 }
 
-let identifier = undefined
+let identifier
 if (cli.flags.prerelease) {
 	identifier = cli.flags.prerelease.replace(/[^a-z0-9]+/gi, '-')
 
 	// add on a git and date suffix
-	const gitHash = await execPromise(`git rev-parse --short HEAD`)
-	const commitDateStr = await execPromise(`git log -1 --pretty=format:%ct HEAD`)
+	const gitHash = await execPromise('git', ['rev-parse', '--short', 'HEAD'])
+	const commitDateStr = await execPromise('git', ['log', '-1', '--pretty=format:%ct', 'HEAD'])
 	const commitDate = parseInt(commitDateStr.trim()) * 1000
 	identifier += `-${format(commitDate, 'yyyyMMdd-HHmmss')}-${gitHash.trim()}`
 }
@@ -168,26 +168,26 @@ if (!cli.flags.dryRun) {
 	if (existsSync('.yarn')) {
 		if (isMonoRepo) {
 			// Update all workspaces
-			await execPromise('yarn workspaces foreach --all version -d ' + nextVersion)
-			await execPromise('yarn version apply --all')
+			await execPromise('yarn', ['workspaces', 'foreach', '--all', 'version', '-d', nextVersion])
+			await execPromise('yarn', ['version', 'apply', '--all'])
 		} else {
 			// yarn 3 needs a different command
-			await execPromise('yarn version ' + nextVersion)
+			await execPromise('yarn', ['version', nextVersion])
 		}
 	} else {
-		await execPromise('yarn version --no-git-tag-version --new-version ' + nextVersion)
+		await execPromise('yarn', ['version', '--no-git-tag-version', '--new-version', nextVersion])
 	}
 
 	// git commit
-	await execPromise(`git add package.json yarn.lock CHANGELOG.md`)
+	await execPromise('git', ['add', 'package.json', 'yarn.lock', 'CHANGELOG.md'])
 	if (isMonoRepo) {
-		await execPromise(`git add */package.json`)
+		await execPromise('git', ['add', '*/package.json'])
 	}
 
-	await execPromise(`git commit --no-verify -m "chore(release): v${nextVersion}"`)
+	await execPromise('git', ['commit', '--no-verify', '-m', `chore(release): v${nextVersion}`])
 
 	// create tag
-	await execPromise(`git tag v${nextVersion}`)
+	await execPromise('git', ['tag', `v${nextVersion}`])
 } else {
 	console.log(HEADER + md)
 }
