@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [3.2.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.0...v3.2.1) (Wed Feb 04 2026)
+
+
+### Fixes
+
+* reject when command fails. perform commit with --no-verify (#40) [e8a028c](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/e8a028c3eb7ccd3c9bfc711d98c4d0260344c8c8)
+
 ## [3.2.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.1.1...v3.2.0) (Tue Sep 30 2025)
 
 
