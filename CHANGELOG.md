@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+
+## [3.2.2](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.1...v3.2.2) (Tue Mar 03 2026)
+
+
+### Fixes
+
+* typo in changelog header link (#41) [451c030](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/451c0309aad4c8c4884224aeda8a7e5c45b3c5fb)
 
 ## [3.2.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.0...v3.2.1) (Wed Feb 04 2026)
 
