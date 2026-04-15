@@ -12,7 +12,7 @@ indent_style = space
 indent_size = 2
 
 [*.{md,diff,patch}]
-# Trailing whitespace is meaningful in these file types
+# Trailing whitespace is meaningful in these file types
 trim_trailing_whitespace = false
 
 [*.md]
