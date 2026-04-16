@@ -38,62 +38,7 @@ These scripts have special meaning in npm/yarn and should follow conventions:
 - `clean` removes everything created by `build` (but not data)
 - `clean --all` (if supported) also removes `node_modules`
 
-### Git Hooks Setup (Husky)
-
-There are two approaches for setting up git hooks in packages that may be used as libraries:
-
-#### Option A: Use `postinstall` with `pinst` (Current atem-connection approach)
-
-```json
-{
-  "scripts": {
-    "postinstall": "husky",
-    "prepack": "pinst --disable && yarn build:main",
-    "postpack": "pinst --enable"
-  },
-  "devDependencies": {
-    "pinst": "^3.0.0"
-  }
-}
-```
-
-Pros:
-
-- Automatic setup on `yarn install`
-- Works with all Yarn versions
-
-Cons:
-
-- Requires `pinst` dependency
-- More complex script setup
-- Runs husky even when installing from git (e.g., `"atem-connection": "github:Sofie-Automation/sofie-atem-connection#branch"`)
-
-#### Option B: Call from development commands (Proposed alternative)
-
-```json
-{
-  "scripts": {
-    "githooks:install": "husky",
-    "build": "yarn githooks:install && rimraf dist && yarn build:main",
-    "build:main": "tsc -p tsconfig.build.json",
-    "lint:raw": "yarn githooks:install && eslint --ext .ts --ext .js"
-  }
-}
-```
-
-Pros:
-
-- Simpler - no `pinst` dependency or pack scripts
-- Only runs during actual development (when building or linting)
-- Doesn't run when installed as library or from git
-- Idempotent - safe to call multiple times
-
-Cons:
-
-- Not automatic on first clone (hooks set up on first `build` or `lint`)
-- Adds slight overhead to build/lint commands (though husky is fast when already installed)
-
-**Discussion needed:** Which approach should be the standard across Sofie packages?
+> **Git hooks (Husky) setup** is not yet standardised — see [GIT_HOOKS_GUIDELINES.md](GIT_HOOKS_GUIDELINES.md) for options and background. An RFC will settle the preferred approach.
 
 ## Clean Scripts
 
@@ -151,7 +96,6 @@ Build scripts should be namespaced with `build:` prefix:
 - `build:main` is the core compilation step
 - `build:*` variants for specialized builds (docs, blueprints, etc.)
 - Don't include `build:watch` in the main `build` - watching is a separate workflow
-- If using git hooks Option B (see above), `build` would call `githooks:install` first
 
 **Special Cases:**
 
@@ -179,7 +123,6 @@ All code quality checks (linting + formatting) belong under `lint`:
 - `lint:fix` applies automatic fixes
 - Formatting happens via `prettier` in `lint-staged`, not a separate script
 - No `fmt`, `format`, or `lint-fix` (use `lint:fix`)
-- If using git hooks Option B (see above), `lint:raw` would call `githooks:install` first
 
 ## Testing Scripts
 
@@ -365,9 +308,8 @@ Some packages have domain-specific needs:
 
 | Purpose              | Script Name              | Example                                          |
 |----------------------|--------------------------|--------------------------------------------------|
-| Install git hooks    | `githooks:install`       | `husky` (if using Option B)                      |
 | Build TypeScript     | `build` or `build:main`  | `tsc -p tsconfig.build.json`                     |
-| Run tests            | `test`                   | `yarn lint && yarn unit`                         |
+| Run tests            | `test`                   | `yarn lint && yarn test:unit`                    |
 | Run linter           | `lint`                   | `eslint .`                                       |
 | Auto-fix lint issues | `lint:fix`               | `eslint --fix .`                                 |
 | Watch tests          | `watch`                  | `jest --watch`                                   |
