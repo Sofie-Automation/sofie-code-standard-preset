@@ -3,6 +3,7 @@ import eslint from '@eslint/js'
 import neslint from 'eslint-plugin-n'
 import tseslint from 'typescript-eslint'
 import sofiePlugin from '@sofie-automation/eslint-plugin'
+import importPlugin from 'eslint-plugin-import'
 
 /**
  *
@@ -86,6 +87,7 @@ export async function generateEslintConfig(options) {
 				vitest: vitestPlugin,
 				'@typescript-eslint': tseslint.plugin,
 				'@sofie-automation': sofiePlugin,
+				import: importPlugin,
 			}),
 			rules: {
 				// Default rules to be applied everywhere
@@ -98,6 +100,16 @@ export async function generateEslintConfig(options) {
 				'no-use-before-define': 'off',
 				'no-warning-comments': ['error', { terms: ['nocommit', '@nocommit', '@no-commit'] }],
 				// 'jest/no-mocks-import': 'off',
+
+				// Import ordering
+				'import/order': [
+					'error',
+					{
+						alphabetize: { caseInsensitive: true, order: 'asc', orderImportKind: 'asc' },
+						'newlines-between': 'always',
+					},
+				],
+				'sort-imports': ['error', { ignoreDeclarationSort: true }],
 			},
 		},
 
