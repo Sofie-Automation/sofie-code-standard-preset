@@ -18,9 +18,13 @@ These scripts have special meaning in npm/yarn and should follow conventions:
 ```json
 {
   "scripts": {
-    "start": "node dist/index.js",             // Start the application
-    "test": "yarn lint && yarn unit",          // Run all tests (lint + unit)
-    "build": "rimraf dist && yarn build:main"  // Build for production
+    "build": "rimraf dist && yarn build:main",  // Build for production
+    "clean": "rimraf dist",                     // Remove build artifacts
+    "dev": "nodemon",                           // Start dev server (if applicable)
+    "start": "node dist/index.js",             // Start the application in production mode
+    "test": "yarn lint && yarn test:unit",     // Run all tests (lint + unit)
+    "lint": "eslint .",                        // Run linting
+    "lint:fix": "yarn lint --fix"              // Auto-fix lint errors
   }
 }
 ```
@@ -28,8 +32,11 @@ These scripts have special meaning in npm/yarn and should follow conventions:
 **Key Rules:**
 
 - `test` should run linting + unit tests as a complete check
-- `start` runs the compiled application
-- `build` cleans and compiles - the "default" build operation
+- `start` starts the compiled application in production mode (no hot reload, no source maps)
+- `dev` starts the application in development mode (hot reload, source maps) — only for projects with a server component
+- `build` compiles everything and reports all TypeScript errors
+- `clean` removes everything created by `build` (but not data)
+- `clean --all` (if supported) also removes `node_modules`
 
 ### Git Hooks Setup (Husky)
 
@@ -88,6 +95,41 @@ Cons:
 
 **Discussion needed:** Which approach should be the standard across Sofie packages?
 
+## Clean Scripts
+
+For removing build artifacts:
+
+```json
+{
+  "scripts": {
+    "clean": "rimraf dist"
+  }
+}
+```
+
+**Guidelines:**
+
+- `clean` removes everything created by `build` (dist folder, generated files) but not data
+- If your tool supports it, `clean --all` should also remove `node_modules`
+
+## Reset Scripts
+
+For projects with databases or persistent data:
+
+```json
+{
+  "scripts": {
+    "reset": "node scripts/reset.js"
+  }
+}
+```
+
+**Guidelines:**
+
+- `reset` deletes data (but not build artifacts) — must prompt "are you sure?" before proceeding
+- `reset --force` deletes without prompting
+- Only include this in projects that manage persistent data
+
 ## Build Scripts
 
 Build scripts should be namespaced with `build:` prefix:
@@ -144,8 +186,9 @@ All code quality checks (linting + formatting) belong under `lint`:
 ```json
 {
   "scripts": {
-    "test": "yarn lint && yarn unit",
-    "unit": "jest",
+    "test": "yarn lint && yarn test:unit",
+    "test:unit": "jest",
+    "test:integration": "jest --config jest.integration.config.js",
     "watch": "jest --watch",
     "cov": "jest --coverage && open-cli coverage/lcov-report/index.html",
     "cov:open": "open-cli coverage/lcov-report/index.html"
@@ -156,11 +199,12 @@ All code quality checks (linting + formatting) belong under `lint`:
 **Guidelines:**
 
 - `test` is the complete quality check (lint + unit tests)
-- `unit` runs just the unit tests
+- `test:unit` runs just the unit tests
+- `test:integration` runs integration tests
+- `test:server` / `test:client` for server/client-specific tests in full-stack projects
 - `watch` runs tests in watch mode
 - `cov` generates coverage and opens report
 - `cov:open` just opens existing coverage report
-- Integration tests can use `test:integration`
 
 ## Watch Scripts
 
@@ -168,7 +212,6 @@ All code quality checks (linting + formatting) belong under `lint`:
 {
   "scripts": {
     "watch": "jest --watch",
-    "watch:sync-local": "yarn workspace blueprints watch-sync-local",
     "watch:types": "tsc --noEmit --watch"
   }
 }
@@ -176,9 +219,10 @@ All code quality checks (linting + formatting) belong under `lint`:
 
 **Guidelines:**
 
-- `watch` runs the most common watch operation (usually tests)
-- `watch:*` for specialized watch modes
-- `watch-sync-local` is allowed as an exception (frequently used blueprint workflow)
+- `watch` runs tests in watch mode (the most common watch operation for libraries)
+- `dev` is the standard development server command (not `watch`) — use `watch:*` for non-server watch variants
+- `watch:*` for specialized watch modes (e.g. `watch:types`)
+- Blueprint exception: `watch-sync-local` is allowed (frequently used workflow, see Blueprint section)
 
 ## Validation Scripts
 
@@ -211,7 +255,11 @@ Security and license checks:
 }
 ```
 
-## Workspace Scripts (Monorepos)
+**Guidelines:**
+
+- `dev` starts the server in development mode with hot reload and source maps
+- `start` (in Standard Lifecycle Scripts above) starts in production mode — no hot reload, no source maps
+- Only include `dev` and `start` in projects that have a server component
 
 Root package.json in workspaces:
 
