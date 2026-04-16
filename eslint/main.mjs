@@ -69,7 +69,9 @@ export async function generateEslintConfig(options) {
 					rules: {
 						...neslint.configs['flat/recommended-script'].rules,
 
-						'n/file-extension-in-import': 'error',
+						// Most projects are CJS and don't need .js extensions on imports.
+						// ESM projects (e.g. Meteor) can override this locally to 'error'.
+						'n/file-extension-in-import': 'off',
 					},
 				}
 			: undefined,
