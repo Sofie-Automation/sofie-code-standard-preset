@@ -407,6 +407,7 @@ __metadata:
     prettier: ^3
     typescript: ~6.0
   bin:
+    sofie-code-standard-preset-setup: ./bin/setup.mjs
     sofie-licensecheck: ./bin/checkLicenses.mjs
     sofie-version: ./bin/updateVersion.mjs
   languageName: unknown
