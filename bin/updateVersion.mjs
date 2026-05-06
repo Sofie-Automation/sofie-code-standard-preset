@@ -1,10 +1,11 @@
 #! /usr/bin/env node
-import semver from 'semver'
 import { exec } from 'child_process'
-import { readFile, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
-import meow from 'meow'
+import { readFile, writeFile } from 'fs/promises'
+
 import { format } from 'date-fns'
+import meow from 'meow'
+import semver from 'semver'
 
 const cli = meow(
 	// editorconfig-checker-disable -- The below string should be formatted with spaces
