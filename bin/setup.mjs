@@ -65,9 +65,17 @@ function markChanged(label) {
 
 // prettier config
 const prettierValue = '@sofie-automation/code-standard-preset/prettier.config.mjs'
-if (pkg.prettier !== prettierValue) {
+if (pkg.prettier === prettierValue) {
+	// already correct, nothing to do
+} else if (
+	!pkg.prettier ||
+	(typeof pkg.prettier === 'string' && pkg.prettier.startsWith('@sofie-automation/code-standard-preset/')) ||
+	force
+) {
 	pkg.prettier = prettierValue
 	markChanged('Set prettier config')
+} else {
+	console.log('  - Skipping prettier config (already set to an unrecognised value) — use --force to override')
 }
 
 // scripts — skip if already set to a different value, unless --force
