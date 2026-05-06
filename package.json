@@ -39,9 +39,10 @@
 		"validate:dev-dependencies": "yarn npm audit --environment development",
 		"license-validate": "./bin/checkLicenses.mjs",
 		"lint": "run lint:eslint && run lint:prettier",
-		"lint:fix": "run lint:eslint --fix && run lint:prettier --write",
+		"lint:fix": "run lint:eslint --fix && run lint:prettier:fix",
 		"lint:eslint": "eslint bin eslint prettier.config.mjs",
-		"lint:prettier": "prettier --check bin eslint prettier.config.mjs"
+		"lint:prettier": "prettier --check bin eslint prettier.config.mjs",
+		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs"
 	},
 	"files": [
 		"/CHANGELOG.md",
