@@ -15,17 +15,17 @@ Example: "This pull request is posted on behalf of the NRK."
 <!-- (pick one of the below) -->
 This is a: Bug fix / Feature / Code improvement / Documentation improvement / Other (please specify)
 
-## Current Behavior
+## Current Behaviour
 
 <!--
 Please describe how things worked before this PR.
 If it's a bug fix: Describe the bug (what was happening?)
 -->
 
-## New Behavior
+## New Behaviour
 
 <!--
-What is the new behavior?
+What is the new behaviour?
 -->
 
 ## Testing Instructions
