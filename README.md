@@ -37,7 +37,7 @@ This readme assumes you are using yarn v4. For other package managers the steps 
 		"lint-fix": "run lint --fix",
 		"license-validate": "sofie-licensecheck"
 	},
-	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
+	"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
 			"prettier --write"
@@ -172,6 +172,24 @@ module.exports = {
 **Remove** any other old linting or tsconfig files and refernces to them, for example a `config` folder containing `tsconfig...` files. These are no longer required.
 
 ## Upgrade
+
+### v3.x to v4.0
+
+Import sorting via `@ianvs/prettier-plugin-sort-imports` is now bundled with this package. You must switch your prettier config reference from `.prettierrc.json` to `prettier.config.mjs`:
+
+In `package.json`, change:
+
+```json
+"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
+```
+
+to:
+
+```json
+"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
+```
+
+This is necessary because Prettier resolves plugin names in JSON configs relative to the consumer project, whereas an `.mjs` config resolves imports from its own location inside the package.
 
 ### v2 to v3.0
 
