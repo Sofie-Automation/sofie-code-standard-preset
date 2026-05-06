@@ -69,7 +69,7 @@ __metadata:
   peerDependencies:
     eslint: ^9
     prettier: ^3
-    typescript: ~5.7
+    typescript: ~6.0
   bin:
     sofie-licensecheck: ./bin/checkLicenses.mjs
     sofie-version: ./bin/updateVersion.mjs
