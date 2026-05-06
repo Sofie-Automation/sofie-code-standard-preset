@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
+import { execFileSync } from 'child_process'
 import { existsSync } from 'fs'
 import { copyFile, mkdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
@@ -200,9 +201,17 @@ if (!existsSync(preCommitPath)) {
 	console.log('  - .husky/pre-commit already exists, skipping')
 }
 
+// ── 7. Install devDependencies ───────────────────────────────────────────────
+
+const devDeps = ['eslint', 'typescript', 'husky', 'lint-staged', 'prettier']
+console.log(`\nInstalling devDependencies: ${devDeps.join(', ')} ...`)
+try {
+	execFileSync('yarn', ['add', '--dev', ...devDeps], { stdio: 'inherit', cwd: projectDir })
+} catch (e) {
+	console.error(`Error installing devDependencies: ${e.message}`)
+	console.error(`  Run manually: yarn add --dev ${devDeps.join(' ')}`)
+}
+
 // ── Done ──────────────────────────────────────────────────────────────────────
 
-console.log('\nDone. Next steps:')
-console.log('  1. yarn add --dev eslint typescript husky lint-staged prettier')
-console.log('  2. yarn install   (to initialize husky via the prepare script)')
-console.log('  3. Review and commit the changes')
+console.log('\nDone. Review and commit the changes.')

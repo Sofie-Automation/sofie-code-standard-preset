@@ -20,15 +20,13 @@ A script for checking compatible licenses is included.
 
 This readme assumes you are using yarn v4. For other package managers the steps should be similar but may vary a little from what is written here.
 
-`yarn add --dev @sofie-automation/code-standard-preset eslint typescript husky lint-staged prettier`
+`yarn add --dev @sofie-automation/code-standard-preset`
 
 ### Automated setup
 
-The easiest way to configure a project is to run the setup CLI:
+The easiest way to configure a project is to run the setup CLI, which will install all other required devDependencies and configure the project automatically:
 
 ```sh
-npx @sofie-automation/code-standard-preset/bin/setup.mjs
-# or, if already installed as a devDependency:
 yarn sofie-code-preset-setup
 ```
 
