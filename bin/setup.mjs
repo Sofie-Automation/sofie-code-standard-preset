@@ -9,6 +9,32 @@ import { fileURLToPath } from 'url'
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const projectDir = process.cwd()
 const force = process.argv.includes('--force')
+const help = process.argv.includes('--help') || process.argv.includes('-h')
+
+if (help) {
+	console.log(`
+Usage: sofie-code-preset-setup [--force] [--help]
+
+Configures the current project to use @sofie-automation/code-standard-preset.
+
+Steps performed:
+  1. Reads package.json in the current directory
+  2. Verifies the project uses yarn
+  3. Sets "prettier" to point to the preset's prettier.config.mjs
+  4. Adds lint scripts (lint, lint:eslint, lint:prettier, lint:fix)
+  5. Adds license-validate and prepare (husky) scripts
+  6. Sets lint-staged config
+  7. Creates eslint.config.mjs if missing
+  8. Copies .editorconfig from the preset
+  9. Creates .husky/pre-commit if missing
+ 10. Installs required devDependencies via yarn add --dev
+
+Options:
+  --force   Overwrite existing values that would otherwise be skipped
+  --help    Show this help message
+`)
+	process.exit(0)
+}
 
 // ── 1. Find and parse the project's package.json ──────────────────────────────
 
