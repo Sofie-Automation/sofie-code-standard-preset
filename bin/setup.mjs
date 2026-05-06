@@ -70,16 +70,17 @@ if (pkg.prettier !== prettierValue) {
 	markChanged('Set prettier config')
 }
 
-// lint scripts — add only if absent (or --force for lint* scripts); add "prepare" only if absent
+// scripts — skip if already set to a different value, unless --force
 pkg.scripts ??= {}
 
-// These scripts are skipped if already set (unless --force)
-const lintSubScripts = {
+const presetScripts = {
 	'lint:eslint': 'eslint .',
 	'lint:prettier': 'prettier --check .',
 	'lint:fix': 'yarn lint:eslint --fix && yarn lint:prettier --write',
+	'license-validate': 'sofie-licensecheck',
+	prepare: 'husky',
 }
-for (const [name, cmd] of Object.entries(lintSubScripts)) {
+for (const [name, cmd] of Object.entries(presetScripts)) {
 	if (pkg.scripts[name] === cmd) {
 		// already correct, nothing to do
 	} else if (!pkg.scripts[name] || force) {
@@ -92,8 +93,8 @@ for (const [name, cmd] of Object.entries(lintSubScripts)) {
 
 // Only add the "lint" umbrella if both sub-scripts are now at the expected values
 const lintUmbrella = 'yarn lint:eslint && yarn lint:prettier'
-const eslintReady = pkg.scripts['lint:eslint'] === lintSubScripts['lint:eslint']
-const prettierReady = pkg.scripts['lint:prettier'] === lintSubScripts['lint:prettier']
+const eslintReady = pkg.scripts['lint:eslint'] === presetScripts['lint:eslint']
+const prettierReady = pkg.scripts['lint:prettier'] === presetScripts['lint:prettier']
 if (eslintReady && prettierReady) {
 	if (pkg.scripts.lint === lintUmbrella) {
 		// already correct, nothing to do
@@ -105,22 +106,6 @@ if (eslintReady && prettierReady) {
 	}
 } else if (pkg.scripts.lint) {
 	console.log('  - Skipping script "lint" (lint:eslint or lint:prettier not set to expected values)')
-}
-
-// These scripts are always set to the expected value
-const alwaysSetScripts = {
-	'license-validate': 'sofie-licensecheck',
-}
-for (const [name, cmd] of Object.entries(alwaysSetScripts)) {
-	if (pkg.scripts[name] !== cmd) {
-		pkg.scripts[name] = cmd
-		markChanged(`Set script "${name}"`)
-	}
-}
-
-if (!pkg.scripts.prepare) {
-	pkg.scripts.prepare = 'husky'
-	markChanged('Set script "prepare" (husky)')
 }
 
 // lint-staged
