@@ -1,9 +1,11 @@
 #! /usr/bin/env node
 'use strict'
+
+import path from 'path'
+
+import checker from 'license-checker'
 import meow from 'meow'
 import { readPackageUpSync } from 'read-package-up'
-import path from 'path'
-import checker from 'license-checker'
 
 const cli = meow(
 	// editorconfig-checker-disable -- The below string should be formatted with spaces

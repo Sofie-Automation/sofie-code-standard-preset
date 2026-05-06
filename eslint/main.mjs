@@ -1,7 +1,8 @@
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import eslint from '@eslint/js'
 import neslint from 'eslint-plugin-n'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import tseslint from 'typescript-eslint'
+
 import sofiePlugin from '@sofie-automation/eslint-plugin'
 
 /**
