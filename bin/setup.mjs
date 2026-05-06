@@ -113,9 +113,13 @@ const targetLintStaged = {
 	'*.{css,json,md,scss}': ['prettier --write'],
 	'*.{ts,tsx,js,jsx,mjs,cjs}': ['eslint --fix'],
 }
-if (JSON.stringify(pkg['lint-staged']) !== JSON.stringify(targetLintStaged)) {
+if (JSON.stringify(pkg['lint-staged']) === JSON.stringify(targetLintStaged)) {
+	// already correct, nothing to do
+} else if (!pkg['lint-staged'] || force) {
 	pkg['lint-staged'] = targetLintStaged
 	markChanged('Set lint-staged config')
+} else {
+	console.log('  - Skipping lint-staged config (already set) — use --force to override')
 }
 
 if (pkgChanged) {
