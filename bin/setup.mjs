@@ -203,7 +203,28 @@ if (!existsSync(preCommitPath)) {
 
 // ── 7. Install devDependencies ───────────────────────────────────────────────
 
-const devDeps = ['eslint', 'typescript', 'husky', 'lint-staged', 'prettier']
+// Read the peer dependency versions from this preset's package.json so that
+// we install compatible versions (e.g. eslint@^9 not the latest eslint@^10).
+const presetPkgPath = path.join(scriptDir, '..', 'package.json')
+let presetPkg = {}
+try {
+	presetPkg = JSON.parse(await readFile(presetPkgPath, 'utf-8'))
+} catch {
+	// Ignore – fall back to unversioned installs
+}
+const peerDeps = presetPkg.peerDependencies ?? {}
+
+function depWithVersion(name) {
+	return peerDeps[name] ? `${name}@${peerDeps[name]}` : name
+}
+
+const devDeps = [
+	depWithVersion('eslint'),
+	depWithVersion('typescript'),
+	'husky',
+	'lint-staged',
+	depWithVersion('prettier'),
+]
 console.log(`\nInstalling devDependencies: ${devDeps.join(', ')} ...`)
 try {
 	execFileSync('yarn', ['add', '--dev', ...devDeps], { stdio: 'inherit', cwd: projectDir })
