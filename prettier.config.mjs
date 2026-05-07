@@ -8,6 +8,7 @@ const config = {
 	semi: false,
 	singleQuote: true,
 	useTabs: true,
+	tabWidth: 4,
 	endOfLine: 'lf',
 	trailingComma: 'es5',
 	plugins: [sortImports],
