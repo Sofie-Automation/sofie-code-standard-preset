@@ -3,13 +3,14 @@
 
 import { execFileSync } from 'child_process'
 import { existsSync } from 'fs'
-import { copyFile, mkdir, readFile, writeFile } from 'fs/promises'
+import { copyFile, mkdir, readdir, readFile, unlink, writeFile } from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const projectDir = process.cwd()
 const force = process.argv.includes('--force')
+const fixSubpackages = process.argv.includes('--fix-subpackages')
 const help = process.argv.includes('--help') || process.argv.includes('-h')
 
 if (help) {
@@ -29,10 +30,13 @@ Steps performed:
   8. Copies .editorconfig from the preset
   9. Creates .husky/pre-commit if missing
  10. Installs required devDependencies via yarn add --dev
+ 11. (with --fix-subpackages) Removes redundant "prettier" keys from sub-package
+     package.json files (they inherit from the root package.json via walk-up)
 
 Options:
-  --force   Overwrite existing values that would otherwise be skipped
-  --help    Show this help message
+  --force             Overwrite existing values that would otherwise be skipped
+  --fix-subpackages   Remove redundant prettier config from sub-packages
+  --help              Show this help message
 `)
 	process.exit(0)
 }
@@ -255,6 +259,125 @@ try {
 } catch (e) {
 	console.error(`Error installing devDependencies: ${e.message}`)
 	console.error(`  Run manually: yarn add --dev ${devDeps.join(' ')}`)
+}
+
+// ── 8. Fix sub-package config files ─────────────────────────────────────────
+
+// In a monorepo, config files in sub-packages shadow the root config.
+// Sub-packages typically don't need their own prettier or legacy eslint configs.
+console.log('\n── Sub-package config files ──')
+
+const prettierConfigFileNames = [
+	'.prettierrc',
+	'.prettierrc.json',
+	'.prettierrc.js',
+	'.prettierrc.cjs',
+	'.prettierrc.mjs',
+	'.prettierrc.yaml',
+	'.prettierrc.yml',
+	'.prettierrc.toml',
+	'prettier.config.js',
+	'prettier.config.cjs',
+	'prettier.config.mjs',
+]
+const eslintLegacyConfigFileNames = [
+	'.eslintrc',
+	'.eslintrc.js',
+	'.eslintrc.cjs',
+	'.eslintrc.json',
+	'.eslintrc.yaml',
+	'.eslintrc.yml',
+]
+
+const subPkgWarnings = []
+try {
+	const entries = await readdir(projectDir, { withFileTypes: true })
+	for (const entry of entries) {
+		if (!entry.isDirectory()) continue
+		const subDir = path.join(projectDir, entry.name)
+
+		// package.json "prettier" key
+		const subPkgPath = path.join(subDir, 'package.json')
+		if (existsSync(subPkgPath)) {
+			let subPkg, subPkgText
+			try {
+				subPkgText = await readFile(subPkgPath, 'utf-8')
+				subPkg = JSON.parse(subPkgText)
+			} catch {
+				subPkg = null
+			}
+			if (subPkg?.prettier) {
+				const rel = path.join(entry.name, 'package.json')
+				if (fixSubpackages) {
+					const subIndent = subPkgText.match(/^\t/m) ? '\t' : '  '
+					delete subPkg.prettier
+					await writeFile(subPkgPath, JSON.stringify(subPkg, null, subIndent) + '\n', 'utf-8')
+					console.log(`  ✔ Removed "prettier" key from ${rel}`)
+				} else {
+					subPkgWarnings.push(`${rel}: has "prettier" key`)
+				}
+			}
+		}
+
+		// Prettier config files
+		for (const file of prettierConfigFileNames) {
+			const filePath = path.join(subDir, file)
+			if (!existsSync(filePath)) continue
+			const rel = path.join(entry.name, file)
+			if (fixSubpackages) {
+				let content = null
+				try {
+					content = await readFile(filePath, 'utf-8')
+				} catch {
+					/* ignore */
+				}
+				let parsed
+				try {
+					parsed = JSON.parse(content)
+				} catch {
+					parsed = content
+				}
+				if (typeof parsed === 'string' && parsed.startsWith('@sofie-automation/code-standard-preset/')) {
+					await unlink(filePath)
+					console.log(`  ✔ Removed ${rel} (preset reference — root config handles this)`)
+				} else {
+					console.log(`  - Skipping ${rel} (unrecognised content) — review manually`)
+				}
+			} else {
+				subPkgWarnings.push(`${rel}: prettier config file`)
+			}
+		}
+
+		// Legacy ESLint config files (conflict with flat config at root)
+		for (const file of eslintLegacyConfigFileNames) {
+			const filePath = path.join(subDir, file)
+			if (!existsSync(filePath)) continue
+			const rel = path.join(entry.name, file)
+			if (fixSubpackages) {
+				await unlink(filePath)
+				console.log(`  ✔ Removed ${rel} (legacy ESLint config — flat config at root handles this)`)
+			} else {
+				subPkgWarnings.push(`${rel}: legacy ESLint config`)
+			}
+		}
+
+		// New-style flat ESLint config in a sub-package — don't auto-remove, just note it
+		const subEslintFlat = path.join(subDir, 'eslint.config.mjs')
+		if (existsSync(subEslintFlat)) {
+			console.log(`  - Note: ${path.join(entry.name, 'eslint.config.mjs')} exists — review if intentional`)
+		}
+	}
+} catch (e) {
+	console.error(`  Warning: could not scan sub-packages: ${e.message}`)
+}
+
+if (subPkgWarnings.length > 0) {
+	console.log(
+		`  - Found ${subPkgWarnings.length} item(s) in sub-packages — run with --fix-subpackages to fix them:\n` +
+			subPkgWarnings.map((f) => `      ${f}`).join('\n')
+	)
+} else if (!fixSubpackages) {
+	console.log('  - No sub-package config issues found')
 }
 
 // ── Done ──────────────────────────────────────────────────────────────────────
