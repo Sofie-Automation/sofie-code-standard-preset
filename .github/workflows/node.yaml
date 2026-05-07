@@ -15,10 +15,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Use Node.js 22.x
+      - name: Use Node.js from .nvmrc
         uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
+      - name: Validate .nvmrc
+        run: node ./bin/ensureNvmrc.mjs
       - name: Prepare Environment
         run: |
           corepack enable
@@ -45,10 +47,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Use Node.js 22.x
+      - name: Use Node.js from .nvmrc
         uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
+      - name: Validate .nvmrc
+        run: node ./bin/ensureNvmrc.mjs
       - name: Prepare Environment
         run: |
           corepack enable

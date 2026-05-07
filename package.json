@@ -37,7 +37,9 @@
 		"reset": "git clean -dfx && git reset --hard && yarn",
 		"validate:dependencies": "yarn npm audit --environment production && run license-validate",
 		"validate:dev-dependencies": "yarn npm audit --environment development",
-		"license-validate": "./bin/checkLicenses.mjs"
+		"license-validate": "./bin/checkLicenses.mjs",
+		"lint:nvmrc": "node ./bin/ensureNvmrc.mjs",
+		"lint:nvmrc:fix": "node ./bin/ensureNvmrc.mjs --fix"
 	},
 	"files": [
 		"/CHANGELOG.md",
