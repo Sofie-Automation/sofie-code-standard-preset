@@ -92,8 +92,32 @@ function markChanged(label) {
 
 // prettier config
 const prettierValue = '@sofie-automation/code-standard-preset/prettier.config.mjs'
-if (pkg.prettier === prettierValue) {
-	// already correct, nothing to do
+
+// If there's a .prettierrc.json file, fix it rather than relying on the package.json key
+// (prettier searches .prettierrc.json before the package.json "prettier" key)
+const prettierrcPath = path.join(projectDir, '.prettierrc.json')
+if (existsSync(prettierrcPath)) {
+	let existingContent
+	try {
+		existingContent = JSON.parse(await readFile(prettierrcPath, 'utf-8'))
+	} catch {
+		existingContent = null
+	}
+	if (existingContent === prettierValue) {
+		console.log('  - .prettierrc.json already correct, skipping')
+	} else if (
+		existingContent === null ||
+		(typeof existingContent === 'string' &&
+			existingContent.startsWith('@sofie-automation/code-standard-preset/')) ||
+		force
+	) {
+		await writeFile(prettierrcPath, `"${prettierValue}"\n`, 'utf-8')
+		console.log('  \u2714 Fixed .prettierrc.json')
+	} else {
+		console.log('  - Skipping .prettierrc.json (already set to an unrecognised value) — use --force to override')
+	}
+} else if (pkg.prettier === prettierValue) {
+	// package.json prettier key already correct, nothing to do
 } else if (
 	!pkg.prettier ||
 	(typeof pkg.prettier === 'string' && pkg.prettier.startsWith('@sofie-automation/code-standard-preset/')) ||
