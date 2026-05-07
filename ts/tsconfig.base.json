@@ -1,23 +1,19 @@
 {
-	// lib and target based on https://www.npmjs.com/package/@tsconfig/node12
+	// lib and target based on https://www.npmjs.com/package/@tsconfig/node22
 	"compilerOptions": {
-		"module": "Node16",
-		"target": "es2022",
+		"module": "node20",
+		"target": "es2024",
 		"noImplicitAny": true,
 		"moduleResolution": "Node16",
 		"sourceMap": true,
-		"paths": {
-			"*": ["../node_modules/*"]
-		},
 		"declaration": true,
 		"importHelpers": true,
 		"listFiles": false,
 		"traceResolution": false,
 		"pretty": true,
-		"lib": ["es2023"],
+		"lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
 		"types": ["node"],
 		"strict": true,
-		"alwaysStrict": false,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true,
