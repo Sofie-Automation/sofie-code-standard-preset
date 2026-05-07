@@ -32,6 +32,8 @@
 		"sofie-version": "./bin/updateVersion.mjs"
 	},
 	"scripts": {
+		"check:nvmrc": "node ./bin/ensureNvmrc.mjs",
+		"fix:nvmrc": "node ./bin/ensureNvmrc.mjs --fix",
 		"changelog": "./bin/updateVersion.mjs",
 		"release": "run reset && run changelog",
 		"reset": "git clean -dfx && git reset --hard && yarn",

@@ -32,12 +32,14 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Use Node.js 18.x
+      - name: Use Node.js from .nvmrc
         uses: actions/setup-node@v6
         with:
-          node-version: 18.x
+          node-version-file: .nvmrc
       - name: Enable corepack
         run: corepack enable
+      - name: Validate .nvmrc
+        run: node ./bin/ensureNvmrc.mjs
       - name: Determine publish info
         id: do-publish
         run: |
@@ -114,10 +116,12 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Use Node.js 24.x
+      - name: Use Node.js from .nvmrc
         uses: actions/setup-node@v6
         with:
-          node-version: 24.x
+          node-version-file: .nvmrc
+      - name: Validate .nvmrc
+        run: node ./bin/ensureNvmrc.mjs
 
       - name: Download release artifact
         uses: actions/download-artifact@v8
