@@ -248,13 +248,7 @@ function depWithVersion(name) {
 	return peerDeps[name] ? `${name}@${peerDeps[name]}` : name
 }
 
-const devDeps = [
-	depWithVersion('eslint'),
-	depWithVersion('typescript'),
-	'husky',
-	'lint-staged',
-	depWithVersion('prettier'),
-]
+const devDeps = ['eslint', 'husky', 'lint-staged', 'prettier', 'typescript'].map(depWithVersion)
 console.log(`\nInstalling devDependencies: ${devDeps.join(', ')} ...`)
 try {
 	execFileSync('yarn', ['add', '--dev', ...devDeps], { stdio: 'inherit', cwd: projectDir })

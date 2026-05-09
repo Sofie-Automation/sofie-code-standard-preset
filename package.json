@@ -78,6 +78,8 @@
 	},
 	"peerDependencies": {
 		"eslint": "^9",
+		"husky": "^9",
+		"lint-staged": "^17",
 		"prettier": "^3",
 		"typescript": "~6.0"
 	},
