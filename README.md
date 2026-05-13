@@ -27,7 +27,7 @@ This readme assumes you are using yarn v4. For other package managers the steps 
 The easiest way to configure a project is to run the setup CLI, which will install all other required devDependencies and configure the project automatically:
 
 ```sh
-yarn sofie-code-preset-setup
+yarn sofie-code-standard-preset-setup
 ```
 
 This will:
@@ -38,9 +38,13 @@ This will:
 4. Create `eslint.config.mjs` if missing
 5. Copy `.editorconfig` from the preset
 6. Create `.husky/pre-commit` if missing
-7. Install required devDependencies via `yarn add --dev`
+7. Install required devDependencies via `yarn add --dev` (`@eslint/js`, `eslint`, `husky`, `lint-staged`, `prettier`, `typescript`)
 
-If any of the above items are already configured to a different value, they will be skipped with a warning. Pass `--force` to overwrite existing values.
+If any of the above items are already configured to a different value, they will be skipped with a warning. Pass `--force` to overwrite existing values:
+
+```sh
+yarn sofie-code-standard-preset-setup --force
+```
 
 After running, review and commit the changes, then follow the manual steps below to add any project-specific configuration.
 
