@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 import { execFile } from 'child_process'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
@@ -39,7 +39,8 @@ const cli = meow(
 const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?\d+\.\d+\.\d+|<a name=)/m
 const HEADER = `# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.\n\n`
 
-const execPromise = async (file, args) => (await promisify(execFile)(file, args, { shell: process.platform === 'win32' })).stdout
+const execPromise = async (file, args) =>
+	(await promisify(execFile)(file, args, { shell: process.platform === 'win32' })).stdout
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
 const isMonoRepo = !!packageFile.workspaces

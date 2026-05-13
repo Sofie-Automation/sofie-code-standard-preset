@@ -37,7 +37,12 @@
 		"reset": "git clean -dfx && git reset --hard && yarn",
 		"validate:dependencies": "yarn npm audit --environment production && run license-validate",
 		"validate:dev-dependencies": "yarn npm audit --environment development",
-		"license-validate": "./bin/checkLicenses.mjs"
+		"license-validate": "./bin/checkLicenses.mjs",
+		"lint": "run lint:eslint && run lint:prettier",
+		"lint:fix": "run lint:eslint --fix && run lint:prettier:fix",
+		"lint:eslint": "eslint bin eslint eslint.config.mjs prettier.config.mjs",
+		"lint:prettier": "prettier --check bin eslint prettier.config.mjs",
+		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs"
 	},
 	"files": [
 		"/CHANGELOG.md",
@@ -48,7 +53,8 @@
 		"/prettier.config.mjs"
 	],
 	"dependencies": {
-		"@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+		"@eslint/js": "^9",
+		"@ianvs/prettier-plugin-sort-imports": "~4.3.1",
 		"@sofie-automation/eslint-plugin": "0.2.1",
 		"@vitest/eslint-plugin": "^1.6.6",
 		"date-fns": "^4.1.0",
@@ -60,11 +66,13 @@
 		"meow": "^13.2.0",
 		"read-package-up": "^11.0.0",
 		"semver": "^7.7.3",
-		"typescript-eslint": "^8.54.0"
+		"typescript-eslint": "8.58.0"
 	},
 	"devDependencies": {
 		"@types/eslint": "^9.6.1",
-		"prettier": "^3.8.1"
+		"eslint": "^9",
+		"prettier": "^3.8.1",
+		"typescript": "~5.7"
 	},
 	"peerDependencies": {
 		"eslint": "^9",
