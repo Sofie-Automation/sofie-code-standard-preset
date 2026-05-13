@@ -221,7 +221,13 @@ export async function generateEslintConfig(options) {
 			? {
 					files: ['eslint.config.*'],
 					rules: {
+						// eslint.config.* files always import devDependencies (ESLint plugins/presets)
+						// by design — they are never part of the published package. The n/ rules flag
+						// these imports if the project has no "files" field in package.json (because
+						// npm then defaults to publishing everything, making eslint.config.* look like
+						// a published file). Suppress both rules unconditionally for config files.
 						'n/no-extraneous-import': 'off',
+						'n/no-unpublished-import': 'off',
 					},
 				}
 			: null,
