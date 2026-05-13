@@ -29,7 +29,7 @@ Steps performed:
   7. Creates eslint.config.mjs if missing
   8. Copies .editorconfig from the preset
   9. Creates .husky/pre-commit if missing
- 10. Installs required devDependencies via yarn add --dev
+ 10. Installs required devDependencies via yarn add --dev (@eslint/js, eslint, husky, lint-staged, prettier, typescript)
  11. (with --fix-subpackages) Removes redundant "prettier" keys from sub-package
      package.json files (they inherit from the root package.json via walk-up)
 
@@ -248,7 +248,7 @@ function depWithVersion(name) {
 	return peerDeps[name] ? `${name}@${peerDeps[name]}` : name
 }
 
-const devDeps = ['eslint', 'husky', 'lint-staged', 'prettier', 'typescript'].map(depWithVersion)
+const devDeps = ['@eslint/js', 'eslint', 'husky', 'lint-staged', 'prettier', 'typescript'].map(depWithVersion)
 console.log(`\nInstalling devDependencies: ${devDeps.join(', ')} ...`)
 try {
 	execFileSync('yarn', ['add', '--dev', ...devDeps], { stdio: 'inherit', cwd: projectDir })
