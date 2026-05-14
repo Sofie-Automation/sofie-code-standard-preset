@@ -60,18 +60,19 @@ After running, review and commit the changes, then follow the manual steps below
 	"scripts": {
 		...,
 		"prepare": "husky",
-		"lint:raw": "eslint",
-		"lint": "run lint:raw .",
-		"lint-fix": "run lint --fix",
+		"lint:eslint": "eslint .",
+		"lint:prettier": "prettier --check .",
+		"lint": "yarn lint:eslint && yarn lint:prettier",
+		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
 		"license-validate": "sofie-licensecheck"
 	},
 	"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
-			"prettier --write"
+			"prettier --check"
 		],
-		"*.{ts,tsx,js,jsx}": [
-			"run lint:raw --fix"
+		"*.{ts,tsx,js,jsx,mjs,cjs}": [
+			"eslint"
 		]
 	},
 	...
@@ -89,7 +90,7 @@ lint-staged
 **Ensure** the following development dependencies are present:
 
 - `@types\node` and `@types\jest` (if using)
-- Typescript 5.7 or above, e.g. `~5.7` with an up-to-date `tslib`
+- Typescript 6.0 or above, e.g. `~6.0` with an up-to-date `tslib`
 - `jest` and `ts-jest`, if using
 
 ### Files
@@ -204,6 +205,32 @@ module.exports = {
 
 ### v3.x to v4.0
 
+#### Node 22 minimum
+
+Node 22 is now the minimum supported version (up from Node 20). Update your `package.json` engines field:
+
+```json
+"engines": { "node": ">= 22.12" }
+```
+
+#### TypeScript ~6.0 required
+
+TypeScript ~6.0 is now required. Update your `package.json` devDependency:
+
+```sh
+yarn add --dev typescript@~6.0
+```
+
+#### Updated peerDependencies
+
+husky@^9 and lint-staged@^17 are now required. If you need to update them:
+
+```sh
+yarn add --dev husky@^9 lint-staged@^17
+```
+
+#### Prettier config: switch to `prettier.config.mjs`
+
 Import sorting via `@ianvs/prettier-plugin-sort-imports` is now bundled with this package. You must switch your prettier config reference from `.prettierrc.json` to `prettier.config.mjs`:
 
 In `package.json`, change:
@@ -219,6 +246,42 @@ to:
 ```
 
 This is necessary because Prettier resolves plugin names in JSON configs relative to the consumer project, whereas an `.mjs` config resolves imports from its own location inside the package.
+
+After switching, run `yarn lint:fix` to apply any import order changes across your codebase.
+
+#### Updated lint scripts and lint-staged config
+
+The lint script names have been standardised. In `package.json`, replace any old-style scripts:
+
+```json
+"lint:raw": "eslint",
+"lint": "run lint:raw .",
+"lint-fix": "run lint --fix",
+```
+
+with:
+
+```json
+"lint:eslint": "eslint .",
+"lint:prettier": "prettier --check .",
+"lint": "yarn lint:eslint && yarn lint:prettier",
+"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+```
+
+Also update `lint-staged` to use check-only commands (pre-commit hooks should fail loudly rather than silently auto-fix) and to cover `.mjs`/`.cjs` files:
+
+```json
+"lint-staged": {
+	"*.{css,json,md,scss}": ["prettier --check"],
+	"*.{ts,tsx,js,jsx,mjs,cjs}": ["eslint"]
+}
+```
+
+You can automate all of the above with the setup CLI:
+
+```sh
+yarn sofie-code-standard-preset-setup --force
+```
 
 ### v2 to v3.0
 
