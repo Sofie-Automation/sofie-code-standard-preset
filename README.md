@@ -38,7 +38,7 @@ yarn sofie-code-standard-preset-setup
 
 This will:
 
-1. Set the `prettier` field in `package.json` to use the preset's config (updating an existing `.prettierrc.json` if one is present)
+1. Delete `.prettierrc.json` if present (it takes precedence over `package.json` and would shadow the preset config), then set the `prettier` field in `package.json` to use the preset's config
 2. Add `lint`, `lint:eslint`, `lint:prettier`, `lint:fix`, `license-validate` and `prepare` scripts to `package.json`
 3. Set `lint-staged` config in `package.json`
 4. Create `eslint.config.mjs` if missing

@@ -22,7 +22,9 @@ Configures the current project to use @sofie-automation/code-standard-preset.
 Steps performed:
   1. Reads package.json in the current directory
   2. Verifies the project uses yarn
-  3. Sets "prettier" to point to the preset's prettier.config.mjs
+  3. Deletes .prettierrc.json if present (it shadows the package.json "prettier" key
+        and must be removed — use --force to delete it automatically)
+     Sets "prettier" in package.json to point to the preset's prettier.config.mjs
   4. Adds lint scripts (lint, lint:eslint, lint:prettier, lint:fix)
   5. Adds license-validate and prepare (husky) scripts
   6. Sets lint-staged config
@@ -97,40 +99,39 @@ function markChanged(label) {
 // prettier config
 const prettierValue = '@sofie-automation/code-standard-preset/prettier.config.mjs'
 
-// If there's a .prettierrc.json file, fix it rather than relying on the package.json key
-// (prettier searches .prettierrc.json before the package.json "prettier" key)
+// .prettierrc.json takes precedence over the package.json "prettier" key, so if it
+// exists the preset config won't take effect until it is deleted.
 const prettierrcPath = path.join(projectDir, '.prettierrc.json')
 if (existsSync(prettierrcPath)) {
-	let existingContent
-	try {
-		existingContent = JSON.parse(await readFile(prettierrcPath, 'utf-8'))
-	} catch {
-		existingContent = null
+	if (force) {
+		await unlink(prettierrcPath)
+		console.log(
+			'  \u2714 Deleted .prettierrc.json (it would shadow the preset config via the package.json "prettier" key)'
+		)
+	} else {
+		console.log(
+			'  ! .prettierrc.json exists and will shadow the preset config — delete it manually, or re-run with --force to delete it automatically'
+		)
 	}
-	if (existingContent === prettierValue) {
-		console.log('  - .prettierrc.json already correct, skipping')
+}
+
+// Set the package.json prettier key (skip if .prettierrc.json is still present,
+// since Prettier will find it first and ignore the package.json key anyway)
+if (!existsSync(prettierrcPath)) {
+	if (pkg.prettier === prettierValue) {
+		// already correct, nothing to do
 	} else if (
-		existingContent === null ||
-		(typeof existingContent === 'string' &&
-			existingContent.startsWith('@sofie-automation/code-standard-preset/')) ||
+		!pkg.prettier ||
+		(typeof pkg.prettier === 'string' && pkg.prettier.startsWith('@sofie-automation/code-standard-preset/')) ||
 		force
 	) {
-		await writeFile(prettierrcPath, `"${prettierValue}"\n`, 'utf-8')
-		console.log('  \u2714 Fixed .prettierrc.json')
+		pkg.prettier = prettierValue
+		markChanged('Set prettier config in package.json')
 	} else {
-		console.log('  - Skipping .prettierrc.json (already set to an unrecognised value) — use --force to override')
+		console.log(
+			'  - Skipping prettier config in package.json (already set to an unrecognised value) — use --force to override'
+		)
 	}
-} else if (pkg.prettier === prettierValue) {
-	// package.json prettier key already correct, nothing to do
-} else if (
-	!pkg.prettier ||
-	(typeof pkg.prettier === 'string' && pkg.prettier.startsWith('@sofie-automation/code-standard-preset/')) ||
-	force
-) {
-	pkg.prettier = prettierValue
-	markChanged('Set prettier config')
-} else {
-	console.log('  - Skipping prettier config (already set to an unrecognised value) — use --force to override')
 }
 
 // scripts — skip if already set to a different value, unless --force
