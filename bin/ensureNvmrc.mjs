@@ -71,7 +71,7 @@ async function main() {
 				`Expected .nvmrc to contain: ${expected}`,
 				`Derived from package.json engines.node: ${range}`,
 				'',
-				'Fix: yarn fix:nvmrc',
+				'Fix: yarn lint:nvmrc:fix',
 			].join('\n'),
 		)
 	} else {
@@ -82,7 +82,7 @@ async function main() {
 				`Expected: ${expected}`,
 				`Derived from package.json engines.node: ${range}`,
 				'',
-				'Fix: yarn fix:nvmrc',
+				'Fix: yarn lint:nvmrc:fix',
 			].join('\n'),
 		)
 	}
