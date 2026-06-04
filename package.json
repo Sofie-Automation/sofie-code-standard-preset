@@ -76,7 +76,7 @@
 		"@types/eslint": "^9.6.1",
 		"eslint": "^9",
 		"prettier": "^3.8.1",
-		"typescript": "~5.7"
+		"typescript": "~6.0"
 	},
 	"peerDependencies": {
 		"eslint": "^9",
