@@ -27,7 +27,6 @@ const config = {
 	],
 	importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
 	importOrderTypeScriptVersion: '5.7.0',
-	importOrderCaseSensitive: false,
 }
 
 export default config

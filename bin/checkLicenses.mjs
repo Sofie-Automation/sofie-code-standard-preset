@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 'use strict'
 
 import path from 'path'
@@ -31,7 +31,7 @@ const cli = meow(
 				type: 'string',
 			},
 		},
-	},
+	}
 )
 
 // This is so that when used in a private project it validates
@@ -87,5 +87,5 @@ checker.init(
 			}
 			process.exit(0)
 		}
-	},
+	}
 )

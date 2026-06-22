@@ -5,6 +5,31 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - name: Prepare Environment
+        run: |
+          corepack enable
+          yarn install
+        env:
+          CI: true
+      - name: Lint
+        run: |
+          yarn lint
+        env:
+          CI: true
+
   validate-dependencies:
     name: Validate production dependencies
     runs-on: ubuntu-latest
