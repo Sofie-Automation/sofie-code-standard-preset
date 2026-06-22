@@ -41,6 +41,8 @@
 		"license-validate": "./bin/checkLicenses.mjs",
 		"lint": "run lint:eslint && run lint:prettier",
 		"lint:fix": "run lint:eslint --fix && run lint:prettier:fix",
+		"lint:nvmrc": "node ./bin/ensureNvmrc.mjs",
+		"lint:nvmrc:fix": "node ./bin/ensureNvmrc.mjs --fix",
 		"lint:eslint": "eslint bin eslint eslint.config.mjs prettier.config.mjs",
 		"lint:prettier": "prettier --check bin eslint prettier.config.mjs",
 		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs"
