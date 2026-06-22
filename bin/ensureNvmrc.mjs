@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 import { readFileSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 
@@ -34,8 +33,7 @@ function getRequiredNodeVersion() {
 
 	// If a minor is specified in engines, we enforce it in .nvmrc too.
 	// Patch defaults to 0 when omitted.
-	const expected =
-		minor === null ? String(major) : `${major}.${minor}.${patch === null ? 0 : patch}`
+	const expected = minor === null ? String(major) : `${major}.${minor}.${patch === null ? 0 : patch}`
 
 	return { expected, range }
 }
@@ -72,7 +70,7 @@ async function main() {
 				`Derived from package.json engines.node: ${range}`,
 				'',
 				'Fix: yarn lint:nvmrc:fix',
-			].join('\n'),
+			].join('\n')
 		)
 	} else {
 		console.error(
@@ -83,7 +81,7 @@ async function main() {
 				`Derived from package.json engines.node: ${range}`,
 				'',
 				'Fix: yarn lint:nvmrc:fix',
-			].join('\n'),
+			].join('\n')
 		)
 	}
 
