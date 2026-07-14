@@ -343,12 +343,12 @@ If not already, the project should be updated to yarn v4 instead of yarn v1. yar
 1. Install the updated `@sofie-automation/code-standard-preset` package
 1. Install tools that used to be included by the preset package: `yarn add --dev eslint husky lint-staged prettier`, any you do not need can be omitted.
 1. Check the package.json scripts;
-   - Change `husky install` to `husky`
-   - Change the `lint:raw` to simply `eslint`
-   - Check if any `yarn X` can be made simply `X` or `run X`
+    - Change `husky install` to `husky`
+    - Change the `lint:raw` to simply `eslint`
+    - Check if any `yarn X` can be made simply `X` or `run X`
 1. In `.husky/pre-commit`, replace the contents to be simply `lint-staged`
 1. Ensure the project has an updated typescript
-   - This may require updating other tools, be sure to check jest/compiling later
+    - This may require updating other tools, be sure to check jest/compiling later
 1. Remove the existing `.eslintrc.json` and replace with the new `eslint.config.mjs` example above. If you have modified your file from the default, you will need to translate that across.
 1. In your code, any references to eslint rules `node/*` have been renamed to `n/*`
 1. Due to the rules requiring conforming to ESM import syntax, you may need to update many file imports. You can use `npx fix-esm-import-path src` as an easy way of updating all the imports in the project
