@@ -40,12 +40,12 @@
 		"validate:dev-dependencies": "yarn npm audit --environment development",
 		"license-validate": "sofie-licensecheck",
 		"lint": "yarn lint:eslint && yarn lint:prettier",
-		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier:fix",
 		"lint:nvmrc": "node ./bin/ensureNvmrc.mjs",
 		"lint:nvmrc:fix": "node ./bin/ensureNvmrc.mjs --fix",
 		"lint:eslint": "eslint .",
 		"lint:prettier": "prettier --check .",
-		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs",
+		"lint:prettier:fix": "prettier --write .",
 		"prepare": "husky"
 	},
 	"files": [

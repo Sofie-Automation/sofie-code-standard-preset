@@ -25,7 +25,7 @@ Steps performed:
   3. Deletes .prettierrc.json if present (it shadows the package.json "prettier" key
         and must be removed — use --force to delete it automatically)
      Sets "prettier" in package.json to point to the preset's prettier.config.mjs
-  4. Adds lint scripts (lint, lint:eslint, lint:prettier, lint:fix)
+  4. Adds lint scripts (lint, lint:eslint, lint:prettier, lint:prettier:fix, lint:fix)
   5. Adds license-validate and prepare (husky) scripts
   6. Sets lint-staged config
   7. Creates eslint.config.mjs if missing
@@ -140,7 +140,8 @@ pkg.scripts ??= {}
 const presetScripts = {
 	'lint:eslint': 'eslint .',
 	'lint:prettier': 'prettier --check .',
-	'lint:fix': 'yarn lint:eslint --fix && yarn lint:prettier --write',
+	'lint:prettier:fix': 'prettier --write .',
+	'lint:fix': 'yarn lint:eslint --fix && yarn lint:prettier:fix',
 	'license-validate': 'sofie-licensecheck',
 	prepare: 'husky',
 }

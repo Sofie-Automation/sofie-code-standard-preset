@@ -39,7 +39,7 @@ yarn sofie-code-standard-preset-setup
 This will:
 
 1. Delete `.prettierrc.json` if present (it takes precedence over `package.json` and would shadow the preset config), then set the `prettier` field in `package.json` to use the preset's config
-2. Add `lint`, `lint:eslint`, `lint:prettier`, `lint:fix`, `license-validate` and `prepare` scripts to `package.json`
+2. Add `lint`, `lint:eslint`, `lint:prettier`, `lint:prettier:fix`, `lint:fix`, `license-validate` and `prepare` scripts to `package.json`
 3. Set `lint-staged` config in `package.json`
 4. Create `eslint.config.mjs` if missing
 5. Copy `.editorconfig` from the preset (always overwrites — the preset's copy is always canonical, since there was no standard version to update from in older releases)
@@ -76,8 +76,9 @@ yarn add --dev @eslint/js eslint@^9 husky@^9 lint-staged@^17 prettier@^3 typescr
 		"prepare": "husky",
 		"lint:eslint": "eslint .",
 		"lint:prettier": "prettier --check .",
+		"lint:prettier:fix": "prettier --write .",
 		"lint": "yarn lint:eslint && yarn lint:prettier",
-		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier:fix",
 		"license-validate": "sofie-licensecheck"
 	},
 	"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
@@ -313,8 +314,9 @@ with:
 ```json
 "lint:eslint": "eslint .",
 "lint:prettier": "prettier --check .",
+"lint:prettier:fix": "prettier --write .",
 "lint": "yarn lint:eslint && yarn lint:prettier",
-"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier:fix",
 ```
 
 Also update `lint-staged` to use check-only commands (pre-commit hooks should fail loudly rather than silently auto-fix) and to cover `.mjs`/`.cjs` files:
