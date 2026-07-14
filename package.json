@@ -38,14 +38,15 @@
 		"reset": "git clean -dfx && git reset --hard && yarn",
 		"validate:dependencies": "yarn npm audit --environment production && run license-validate",
 		"validate:dev-dependencies": "yarn npm audit --environment development",
-		"license-validate": "./bin/checkLicenses.mjs",
-		"lint": "run lint:eslint && run lint:prettier",
-		"lint:fix": "run lint:eslint --fix && run lint:prettier:fix",
+		"license-validate": "sofie-licensecheck",
+		"lint": "yarn lint:eslint && yarn lint:prettier",
+		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
 		"lint:nvmrc": "node ./bin/ensureNvmrc.mjs",
 		"lint:nvmrc:fix": "node ./bin/ensureNvmrc.mjs --fix",
-		"lint:eslint": "eslint bin eslint eslint.config.mjs prettier.config.mjs",
-		"lint:prettier": "prettier --check bin eslint prettier.config.mjs",
-		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs"
+		"lint:eslint": "eslint .",
+		"lint:prettier": "prettier --check .",
+		"lint:prettier:fix": "prettier --write bin eslint prettier.config.mjs",
+		"prepare": "husky"
 	},
 	"files": [
 		"/CHANGELOG.md",
@@ -75,6 +76,8 @@
 	"devDependencies": {
 		"@types/eslint": "^9.6.1",
 		"eslint": "^9",
+		"husky": "^9",
+		"lint-staged": "^17",
 		"prettier": "^3.8.1",
 		"typescript": "~6.0"
 	},
@@ -85,5 +88,14 @@
 		"prettier": "^3",
 		"typescript": "~6.0"
 	},
-	"packageManager": "yarn@4.12.0"
+	"packageManager": "yarn@4.12.0",
+	"prettier": "./prettier.config.mjs",
+	"lint-staged": {
+		"*.{css,json,md,scss}": [
+			"prettier --check"
+		],
+		"*.{ts,tsx,js,jsx,mjs,cjs}": [
+			"eslint"
+		]
+	}
 }
