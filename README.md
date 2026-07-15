@@ -83,7 +83,7 @@ yarn add --dev @eslint/js eslint@^9 husky@^9 lint-staged@^17 prettier@^3 typescr
 	},
 	"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
 	"lint-staged": {
-		"*.{css,json,md,scss}": [
+		"*.{css,json,md,scss,yaml,yml}": [
 			"prettier --check"
 		],
 		"*.{ts,tsx,js,jsx,mjs,cjs}": [
@@ -323,7 +323,7 @@ Also update `lint-staged` to use check-only commands (pre-commit hooks should fa
 
 ```json
 "lint-staged": {
-	"*.{css,json,md,scss}": ["prettier --check"],
+	"*.{css,json,md,scss,yaml,yml}": ["prettier --check"],
 	"*.{ts,tsx,js,jsx,mjs,cjs}": ["eslint"]
 }
 ```

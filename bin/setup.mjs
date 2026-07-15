@@ -177,7 +177,7 @@ if (eslintReady && prettierReady) {
 // Use check-only commands: pre-commit should notify and fail, not silently
 // auto-fix (lint-staged doesn't re-add modified files to the commit index)
 const targetLintStaged = {
-	'*.{css,json,md,scss}': ['prettier --check'],
+	'*.{css,json,md,scss,yaml,yml}': ['prettier --check'],
 	'*.{ts,tsx,js,jsx,mjs,cjs}': ['eslint'],
 }
 if (JSON.stringify(pkg['lint-staged']) === JSON.stringify(targetLintStaged)) {
