@@ -26,7 +26,7 @@ const config = {
 		'<TYPES>^[./]',
 	],
 	importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
-	importOrderTypeScriptVersion: '5.7.0',
+	importOrderTypeScriptVersion: '6.0.0',
 	overrides: [
 		{
 			files: ['*.yaml', '*.yml'],
