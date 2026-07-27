@@ -13,6 +13,7 @@ Example: "This pull request is posted on behalf of the NRK."
 ## Type of Contribution
 
 <!-- (pick one of the below) -->
+
 This is a: Bug fix / Feature / Code improvement / Documentation improvement / Other (please specify)
 
 ## Current Behaviour
@@ -68,6 +69,7 @@ Example:
 -->
 
 ## Other Information
+
 <!-- The more information you can provide, the easier the pull request will be to merge -->
 
 ## Status

@@ -39,7 +39,7 @@ yarn sofie-code-standard-preset-setup
 This will:
 
 1. Delete `.prettierrc.json` if present (it takes precedence over `package.json` and would shadow the preset config), then set the `prettier` field in `package.json` to use the preset's config
-2. Add `lint`, `lint:eslint`, `lint:prettier`, `lint:fix`, `license-validate` and `prepare` scripts to `package.json`
+2. Add `lint`, `lint:eslint`, `lint:prettier`, `lint:prettier:fix`, `lint:fix`, `license-validate` and `prepare` scripts to `package.json`
 3. Set `lint-staged` config in `package.json`
 4. Create `eslint.config.mjs` if missing
 5. Copy `.editorconfig` from the preset (always overwrites — the preset's copy is always canonical, since there was no standard version to update from in older releases)
@@ -76,13 +76,14 @@ yarn add --dev @eslint/js eslint@^9 husky@^9 lint-staged@^17 prettier@^3 typescr
 		"prepare": "husky",
 		"lint:eslint": "eslint .",
 		"lint:prettier": "prettier --check .",
+		"lint:prettier:fix": "prettier --write .",
 		"lint": "yarn lint:eslint && yarn lint:prettier",
-		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+		"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier:fix",
 		"license-validate": "sofie-licensecheck"
 	},
 	"prettier": "@sofie-automation/code-standard-preset/prettier.config.mjs",
 	"lint-staged": {
-		"*.{css,json,md,scss}": [
+		"*.{css,json,md,scss,yaml,yml}": [
 			"prettier --check"
 		],
 		"*.{ts,tsx,js,jsx,mjs,cjs}": [
@@ -313,15 +314,16 @@ with:
 ```json
 "lint:eslint": "eslint .",
 "lint:prettier": "prettier --check .",
+"lint:prettier:fix": "prettier --write .",
 "lint": "yarn lint:eslint && yarn lint:prettier",
-"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
+"lint:fix": "yarn lint:eslint --fix && yarn lint:prettier:fix",
 ```
 
 Also update `lint-staged` to use check-only commands (pre-commit hooks should fail loudly rather than silently auto-fix) and to cover `.mjs`/`.cjs` files:
 
 ```json
 "lint-staged": {
-	"*.{css,json,md,scss}": ["prettier --check"],
+	"*.{css,json,md,scss,yaml,yml}": ["prettier --check"],
 	"*.{ts,tsx,js,jsx,mjs,cjs}": ["eslint"]
 }
 ```
@@ -341,12 +343,12 @@ If not already, the project should be updated to yarn v4 instead of yarn v1. yar
 1. Install the updated `@sofie-automation/code-standard-preset` package
 1. Install tools that used to be included by the preset package: `yarn add --dev eslint husky lint-staged prettier`, any you do not need can be omitted.
 1. Check the package.json scripts;
-   - Change `husky install` to `husky`
-   - Change the `lint:raw` to simply `eslint`
-   - Check if any `yarn X` can be made simply `X` or `run X`
+    - Change `husky install` to `husky`
+    - Change the `lint:raw` to simply `eslint`
+    - Check if any `yarn X` can be made simply `X` or `run X`
 1. In `.husky/pre-commit`, replace the contents to be simply `lint-staged`
 1. Ensure the project has an updated typescript
-   - This may require updating other tools, be sure to check jest/compiling later
+    - This may require updating other tools, be sure to check jest/compiling later
 1. Remove the existing `.eslintrc.json` and replace with the new `eslint.config.mjs` example above. If you have modified your file from the default, you will need to translate that across.
 1. In your code, any references to eslint rules `node/*` have been renamed to `n/*`
 1. Due to the rules requiring conforming to ESM import syntax, you may need to update many file imports. You can use `npx fix-esm-import-path src` as an easy way of updating all the imports in the project

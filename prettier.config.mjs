@@ -26,7 +26,17 @@ const config = {
 		'<TYPES>^[./]',
 	],
 	importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
-	importOrderTypeScriptVersion: '5.7.0',
+	importOrderTypeScriptVersion: '6.0.0',
+	overrides: [
+		{
+			files: ['*.yaml', '*.yml'],
+			options: {
+				// YAML files should always use 2 spaces for indentation
+				useTabs: false,
+				tabWidth: 2,
+			},
+		},
+	],
 }
 
 export default config
