@@ -185,7 +185,7 @@ if (!cli.flags.dryRun) {
 		await execPromise('git', ['add', '*/package.json'])
 	}
 
-	await execPromise('git', ['commit', '--no-verify', '-m', `chore(release): v${nextVersion}`])
+	await execPromise('git', ['commit', '--no-verify', '-m', `"chore(release): v${nextVersion}"`])
 
 	// create tag
 	await execPromise('git', ['tag', `v${nextVersion}`])
