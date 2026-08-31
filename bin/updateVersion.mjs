@@ -163,7 +163,11 @@ try {
 }
 
 if (!cli.flags.dryRun) {
+	// Write to the changelog file
 	await writeFile('./CHANGELOG.md', HEADER + md + '\n\n' + oldContent)
+
+	// To ensure formatting, also run prettier:
+	await execPromise('yarn', ['lint', '--write'])
 
 	// update the package.json
 	if (existsSync('.yarn')) {
