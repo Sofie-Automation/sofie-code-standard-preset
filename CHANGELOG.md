@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [4.0.2](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v4.0.1...v4.0.2) (Mon Aug 31 2026)
+
+### Fixes
+
+- eslint peerDependency [498e5fb](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/498e5fb3cdd3846b9a36366e61239c4c91847cbf)
+
 ## [4.0.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v4.0.0...v4.0.1) (Mon Aug 31 2026)
 
 ### Fixes

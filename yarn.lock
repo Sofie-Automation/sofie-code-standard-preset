@@ -388,7 +388,7 @@ __metadata:
     typescript: "npm:~6.0"
     typescript-eslint: "npm:8.58.0"
   peerDependencies:
-    eslint: ^9
+    eslint: ^10
     husky: ^9
     lint-staged: ^17
     prettier: ^3
