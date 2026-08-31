@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [4.0.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.2...v4.0.0) (Mon Aug 31 2026)
+
+## Breaking changes
+
+* Node 22 is now the minimum supported version (up from Node 20)
+* TypeScript ~6.0 peerDependency required (up from ~5.7)
+* husky@^9 and lint-staged@^17 required as peerDependencies
+* Must switch prettier config from .prettierrc.json to prettier.config.mjs
+* Lint script names standardised (lint:raw => lint:eslint, lint-fix => lint:fix)
+* lint-staged now uses check-only commands; covers .mjs/.cjs files
+
+### Fixes
+
+* **(lint-staged)** include yaml and yml in prettier pre-commit glob [5eff129](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/5eff1291e5ed7778b845458e43e9199c931ecf88)
+* **(setup)** use lint:prettier:fix for lint:fix [49105f5](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/49105f55427a59d0f5511b1b34849bd48669b311)
+* delete .prettierrc.json instead of rewriting it [272d813](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/272d8131db3bcfc415a93ca224982d978a8a5edb)
+* suppress n/no-unpublished-import for eslint.config.* files [3987872](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/398787288648e3b993eb7eb7f2c3d2580d45ccf9)
+* add @eslint/js to devDependencies installed by setup script [234c1cd](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/234c1cd9238fe05f15a46d2f492e680eb216052d)
+* Use check-only commands in lint-staged config [7308afe](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/7308afee0ec66f2f785d8c092ca7316b3606d9fa)
+* Detect and update existing .prettierrc.json when running setup script [1095417](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/1095417d19e0f64457232760fa3cdfbbce67de17)
+* Install peer-compatible versions of eslint/typescript/prettier [18eb8e6](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/18eb8e61e3be7827cbaa9a01f5684abafbf9a944)
+* fix lint:fix by adding lint:prettier:fix [0855f7f](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/0855f7f28258269b73f108dc2d6c5748c2c184fc)
+* enable shell mode on Windows for yarn compatibility [f7edd82](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/f7edd827f8e7f49cf7fd3d7fc7823486a25cfc27)
+
+### Features
+
+* Add husky@^9 and lint-staged@^17 to peerDependencies [8c68658](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/8c68658079f45b2a8cc50b182f0cd934884db8cc)
+* Add --fix-subpackages flag to clean up monorepo sub-package configs [07ccff1](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/07ccff1878b5f25bcf6f058019376d1bf9567703)
+* **(setup)** auto-install devDependencies via yarn add --dev [73c825d](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/73c825dbc8a2e434d8e62ae09530885643f32d8c)
+* **(setup)** add --help flag; document setup CLI in README [18e6543](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/18e6543829e6648e29ab3ccabc894648b1c050aa)
+* **(setup)** overwrite known old prettier config; warn and require --force for unknown values [b9922c5](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/b9922c5d3c5a9014d9eba35beefa8deaa6ff9a8a)
+* **(setup)** skip lint-staged if already set unless --force [c739aea](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/c739aeaa696b524a7aeb74292b6a1336ddc0db55)
+* **(setup)** don't override existing lint* scripts unless --force [8b05a25](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/8b05a25f511c05decebb4fcaa46c85dc5cb5b6f9)
+* add sofie-code-preset-setup bin script [f0604a5](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/f0604a5ea94791b060ac03f37c82058d8b2893e5)
+* enforce .nvmrc [67dfff0](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/67dfff0bf118a5c4c3552424de14012d8b67fa64)
+* target minimum node 22 (#50) [d04efc0](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/d04efc02c9b7d8713df8dc032cb3c8bf279cb480)
+* add prettier.config.mjs with @ianvs/prettier-plugin-sort-imports bundled [294b4b8](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/294b4b8096c914c8b9e81a2e0d901f940bead054)
+* Add prettier import order plugin [9a79202](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/9a79202797df4e7704e79bb097d4b7735d166cbd)
+
 ## [3.2.2](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.1...v3.2.2) (Tue Mar 03 2026)
 
 ### Fixes
