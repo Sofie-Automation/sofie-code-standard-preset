@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [4.0.1](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v4.0.0...v4.0.1) (Mon Aug 31 2026)
+
+
+### Fixes
+
+* update eslint to supported version ( 9 -> 10 ) [bfae202](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/bfae2029608f6053046193942f29a1a820451018)
+
 ## [4.0.0](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v3.2.2...v4.0.0) (Mon Aug 31 2026)
 
 ## Breaking changes
