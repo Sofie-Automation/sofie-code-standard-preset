@@ -34,7 +34,7 @@
 	},
 	"scripts": {
 		"changelog": "./bin/updateVersion.mjs",
-		"release": "run reset && run changelog",
+		"release": "run reset && run lint && run validate:dependencies && run validate:dev-dependencies && run changelog",
 		"reset": "git clean -dfx && git reset --hard && yarn",
 		"validate:dependencies": "yarn npm audit --environment production && run license-validate",
 		"validate:dev-dependencies": "yarn npm audit --environment development",
@@ -75,7 +75,7 @@
 	},
 	"devDependencies": {
 		"@types/eslint": "^9.6.1",
-		"eslint": "^9",
+		"eslint": "^10",
 		"husky": "^9",
 		"lint-staged": "^17",
 		"prettier": "^3.8.1",
