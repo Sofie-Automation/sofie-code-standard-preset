@@ -1,4 +1,27 @@
-import sortImports from '@ianvs/prettier-plugin-sort-imports'
+import sortImportsPlugin from '@ianvs/prettier-plugin-sort-imports'
+
+/**
+ * The plugin exposes its ember and oxc parsers and printers as getters, which throw when their optional peer
+ * dependency (prettier-plugin-ember-template-tag / @prettier/plugin-oxc) is not installed.
+ * Prettier reads all of them while resolving the config, so a project without those peers fails to format
+ * anything. Only expose the ones which can actually be loaded.
+ */
+function withoutUnloadable(entries) {
+	return Object.fromEntries(
+		Object.keys(entries).flatMap((name) => {
+			try {
+				return [[name, entries[name]]]
+			} catch {
+				return []
+			}
+		})
+	)
+}
+const sortImports = {
+	...sortImportsPlugin,
+	parsers: withoutUnloadable(sortImportsPlugin.parsers),
+	printers: withoutUnloadable(sortImportsPlugin.printers),
+}
 
 /** @type {import('prettier').Config} */
 const config = {
