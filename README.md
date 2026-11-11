@@ -251,6 +251,17 @@ Ensure the following devDependencies are present if using jest:
 * text=auto eol=lf
 ```
 
+## Releasing with `sofie-version`
+
+`sofie-version` bumps the version, prepends the release to `CHANGELOG.md`, and commits and tags it (`v<version>`). The version is determined from the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) since the last release tag which is part of the history of `HEAD`. The `homepage` of the `package.json` is used to link to the commits.
+
+- `--release-as <version|major|minor|patch>` releases as that version or bump, instead of determining it from the commits
+- `--prerelease` makes a prerelease, continuing an existing prerelease series (eg `1.2.0-1` to `1.2.0-2`)
+- `--prerelease <name>` makes a prerelease with that name and a date and git hash suffix, eg for nightly builds
+- `--dry-run` prints the changelog without changing anything
+
+In a monorepo (a `package.json` with `workspaces`, using yarn v2 or later), every workspace is set to the same version, including the dependencies between them. Workspaces which have a `CHANGELOG.md` committed also get their own changelog, with only the commits which touched that workspace. To give a workspace a changelog, commit an empty `CHANGELOG.md` for it.
+
 ## Upgrade
 
 ### v3.x to v4.0
