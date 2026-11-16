@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execFile } from 'child_process'
+import { exec, execFile } from 'child_process'
 import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import path from 'path'
@@ -47,13 +47,20 @@ const cli = meow(
 const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?\d+\.\d+\.\d+|<a name=)/m
 const HEADER = `# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.\n\n`
 
-const execPromise = async (file, args) =>
-	(
-		await promisify(execFile)(file, args, {
-			shell: process.platform === 'win32',
-			maxBuffer: 64 * 1024 * 1024,
-		})
-	).stdout
+/** Quote an argument for cmd.exe, which does not split quoted arguments */
+const quoteWindowsArg = (arg) => (/[\s"&|<>^()%!]/.test(arg) ? `"${arg.replace(/"/g, '""')}"` : arg)
+
+const execPromise = async (file, args) => {
+	const options = { maxBuffer: 64 * 1024 * 1024 }
+
+	if (process.platform === 'win32' && file !== 'git') {
+		// On windows yarn is a .cmd shim which must be run through a shell, which does not escape the arguments itself
+		const command = [file, ...args.map(quoteWindowsArg)].join(' ')
+		return (await promisify(exec)(command, options)).stdout
+	}
+
+	return (await promisify(execFile)(file, args, options)).stdout
+}
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
 const isMonoRepo = !!packageFile.workspaces
@@ -68,11 +75,14 @@ const currentVersion = packageFile.version
 const repoUrl = packageFile.homepage.split('#')[0]
 
 // find the last release tag which is part of the history of HEAD
+// This is sorted by semver, as git sorts a prerelease (v1.2.0-rc.1) above its release (v1.2.0)
 const lastTag =
 	cli.flags.lastTag ||
-	(await execPromise('git', ['tag', '--list', '--merged', 'HEAD', '--sort=-v:refname']))
+	(await execPromise('git', ['tag', '--list', '--merged', 'HEAD']))
 		.split('\n')
-		.find((tag) => semver.valid(tag)) ||
+		.map((tag) => tag.trim())
+		.filter((tag) => semver.valid(tag))
+		.sort(semver.rcompare)[0] ||
 	''
 
 /**
@@ -83,8 +93,9 @@ async function getChanges(paths) {
 	const args = ['log', '--format=%x1e%s%x1f%b%x1f%h%x1f%H', lastTag ? `${lastTag}..HEAD` : 'HEAD']
 	if (paths) args.push('--', ...paths)
 
-	const breakingChanges = {}
-	const changes = {}
+	// Without a prototype, so that a commit type such as `constructor` doesn't resolve to an inherited property
+	const breakingChanges = Object.create(null)
+	const changes = Object.create(null)
 
 	const conventional = /^(?<type>\w+)(?<scope>(?:\([^()\r\n]*\)|\()?(?<breaking>!)?)(?<subject>:.*)?/
 	for (const rawCommit of (await execPromise('git', args)).split('\x1e')) {
@@ -167,12 +178,16 @@ function getNextVersion() {
 	return semver.inc(currentVersion, `pre${bump}`, identifier)
 }
 const nextVersion = getNextVersion()
+if (!semver.gt(nextVersion, currentVersion)) {
+	console.error(`Release version "${nextVersion}" must be greater than the current version "${currentVersion}"`)
+	process.exit(1)
+}
 
 // create a markdown changelog
-const groups = {
+const groups = Object.assign(Object.create(null), {
 	feat: 'Features',
 	fix: 'Fixes',
-}
+})
 const compareUrl = lastTag ? `${repoUrl}/compare/${lastTag}...v${nextVersion}` : `${repoUrl}/commits/v${nextVersion}`
 
 /**
@@ -188,11 +203,11 @@ function renderChangelog({ breakingChanges, changes }, packageName) {
 		`\n* ${change.scope ? `**${change.scope}** ` : ''}${change.description} [${change.short}](${repoUrl}/commit/${change.hash})`
 
 	if (Object.keys(breakingChanges).length) {
-		md += '\n## Breaking changes\n'
+		md += '\n### Breaking changes\n'
 
 		for (const [type, commits] of Object.entries(breakingChanges)) {
 			if (!groups[type]) continue
-			md += '\n### ' + groups[type] + '\n'
+			md += '\n#### ' + groups[type] + '\n'
 
 			for (const change of commits) {
 				md += renderChange(change)
@@ -246,6 +261,12 @@ async function prependToChangelog(changelogPath, md) {
 		const oldContentStart = oldContent.search(START_OF_LAST_RELEASE_PATTERN)
 		if (oldContentStart !== -1) {
 			oldContent = oldContent.substring(oldContentStart)
+		} else if (oldContent.startsWith(HEADER)) {
+			// No releases yet, drop the header as it gets added again below
+			oldContent = oldContent.substring(HEADER.length)
+		} else {
+			// No releases yet, such as a placeholder committed to opt a workspace in. Drop its title, as HEADER replaces it
+			oldContent = oldContent.replace(/^\s*# [^\n]*\n*/, '')
 		}
 	} catch (e) {
 		if (e.code === 'ENOENT') {
