@@ -39,8 +39,10 @@ const cli = meow(
 const START_OF_LAST_RELEASE_PATTERN = /(^#+ \[?\d+\.\d+\.\d+|<a name=)/m
 const HEADER = `# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.\n\n`
 
+// On windows, yarn is a .cmd shim which can only be run through a shell. The shell joins the args without quoting them,
+// so avoid it for everything else (git is a real executable)
 const execPromise = async (file, args) =>
-	(await promisify(execFile)(file, args, { shell: process.platform === 'win32' })).stdout
+	(await promisify(execFile)(file, args, { shell: process.platform === 'win32' && file === 'yarn' })).stdout
 
 const packageFile = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }))
 const isMonoRepo = !!packageFile.workspaces
@@ -189,7 +191,7 @@ if (!cli.flags.dryRun) {
 		await execPromise('git', ['add', '*/package.json'])
 	}
 
-	await execPromise('git', ['commit', '--no-verify', '-m', `"chore(release): v${nextVersion}"`])
+	await execPromise('git', ['commit', '--no-verify', '-m', `chore(release): v${nextVersion}`])
 
 	// create tag
 	await execPromise('git', ['tag', `v${nextVersion}`])
