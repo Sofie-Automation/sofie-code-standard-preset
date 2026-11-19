@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [4.0.4](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v4.0.3...v4.0.4) (Thu Nov 19 2026)
+
+### Fixes
+
+- release commit message containing literal quotes [564a61e](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/564a61e35063fb095c674d763f3038a4bcb3e5b0)
+- prettier config failing to load without the optional peers of the import sorting plugin [bbec010](https://github.com/Sofie-Automation/sofie-code-standard-preset/commit/bbec010ab301fc5b73566a25b4631c62b3f5b083)
+
 ## [4.0.3](https://github.com/Sofie-Automation/sofie-code-standard-preset/compare/v4.0.2...v4.0.3) (Tue Sep 08 2026)
 
 ### Fixes
