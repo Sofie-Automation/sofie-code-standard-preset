@@ -251,6 +251,14 @@ Ensure the following devDependencies are present if using jest:
 * text=auto eol=lf
 ```
 
+## License check
+
+`sofie-licensecheck` checks that all installed dependencies (including devDependencies) use a compatible license. Run `sofie-licensecheck --help` for all options.
+
+In a monorepo, run it from the root of the repository. Workspace dependencies are hoisted to the root `node_modules`, so running it inside a workspace package finds nothing to check. The check fails if any dependency declared in `package.json` is not found, to catch this.
+
+To save the list of found packages and their licenses, pass `--out <file>` and optionally `--format json|csv|markdown|plainVertical`. The file is only written when the check passes.
+
 ## Upgrade
 
 ### v3.x to v4.0
